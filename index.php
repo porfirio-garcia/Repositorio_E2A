@@ -136,5 +136,39 @@ cabecera('Encuentra tu carrera');
   </div>
 </section>
 
+<!-- ======================= Testimonios (Prueba de Porfirio) ======================= -->
+<section class="contenedor seccion" id="testimonios">
+  <h2>Lo que dicen nuestros estudiantes</h2>
+  <p class="entradilla ancho-lectura">
+    Conoce las experiencias de quienes ya forman parte de la comunidad UTBB.
+  </p>
+
+  <div class="rejilla"> 
+    <!-- Tarjeta de ejemplo 1 -->
+    <div class="tarjeta">
+      <div class="tarjeta__cuerpo">
+        <h3 class="tarjeta__titulo">Sergio Pérez</h3>
+        <p class="leyenda">Estudiante | Agricultura</p>
+        <p>"La carrera me ha parecido excelente. Los profesores explican muy bien y las prácticas en el campo son lo mejor."</p>
+      </div>
+      <div class="tarjeta__pie">
+        <span class="insignia insignia--info">Pendiente</span>
+      </div>
+    </div>
+
+    <!-- Tarjeta de ejemplo 2 -->
+    <div class="tarjeta">
+      <div class="tarjeta__cuerpo">
+        <h3 class="tarjeta__titulo">María López</h3>
+        <p class="leyenda">Egresado | Desarrollo de Software</p>
+        <p>"Gracias al explorador vocacional encontré mi pasión. Ahora trabajo en una empresa de tecnología y me va muy bien."</p>
+      </div>
+      <div class="tarjeta__pie">
+        <span class="insignia insignia--info">Aprobado</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <?php
 pie();
