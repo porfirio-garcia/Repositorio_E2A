@@ -32,6 +32,7 @@ pintar_mensajes();
         </p>
 
         <form
+            id="form-testimonio"
             class="formulario tes-formulario"
             action="guardar_testimonio.php"
             method="POST"
@@ -39,6 +40,8 @@ pintar_mensajes();
         >
 
             <?= campo_token() ?>
+
+            <p id="mensaje-formulario" role="alert"></p>
 
             <div class="campo">
                 <label class="campo__etiqueta" for="nombre">

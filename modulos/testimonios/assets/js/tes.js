@@ -14,9 +14,8 @@
                     ? ''
                     : 'Selecciona estudiante o egresado.';
             },
-            carrera: (valor) => {
+            carrera_id: (valor) => {
                 if (!valor) return 'Indica tu carrera.';
-                if ([...valor].length > 100) return 'La carrera admite hasta 100 caracteres.';
                 return '';
             },
             generacion: (valor) => {
