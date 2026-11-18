@@ -202,11 +202,51 @@ $mimesPermitidos = [
     'webm' => 'video/webm'
 ];
 
-if (
-    !isset($mimesPermitidos[$extension]) ||
-    $mime !== $mimesPermitidos[$extension]
-) {
-    tes_error_subida('El formato real del video no coincide con su extensión.');
+$mimeValido = isset($mimesPermitidos[$extension])
+    && $mime === $mimesPermitidos[$extension];
+
+// Algunos sistemas no reconocen ciertos MP4 y devuelven
+// application/octet-stream. En ese caso verificamos su estructura.
+if ($extension === 'mp4' && $mime === 'application/octet-stream') {
+
+    $archivo = fopen($video['tmp_name'], 'rb');
+
+    if ($archivo !== false) {
+        $cabecera = fread($archivo, 16);
+        fclose($archivo);
+
+        // Tamaño del átomo ftyp (los primeros 4 bytes).
+        $datosTamano = unpack('N', substr($cabecera, 0, 4));
+        $tamanoFtyp = $datosTamano[1] ?? 0;
+
+        // Identificador del contenedor MP4.
+        $esFtyp = substr($cabecera, 4, 4) === 'ftyp';
+
+        // Marca principal del contenedor.
+        $marca = substr($cabecera, 8, 4);
+
+        $marcasMP4 = [
+            'isom', 'iso2', 'iso3', 'iso4',
+            'iso5', 'iso6', 'mp41', 'mp42',
+            'avc1', 'M4V '
+        ];
+
+        $estructuraMP4Valida =
+            $esFtyp &&
+            $tamanoFtyp >= 16 &&
+            $tamanoFtyp <= $video['size'] &&
+            in_array($marca, $marcasMP4, true);
+
+        if ($estructuraMP4Valida) {
+            $mimeValido = true;
+        }
+    }
+}
+
+if (!$mimeValido) {
+    tes_error_subida(
+        'El formato real del video no coincide con su extensión.'
+    );
 }
 
 // --------------------------------------------------
