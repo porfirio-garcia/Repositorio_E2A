@@ -147,25 +147,15 @@ $video = $_FILES['video'];
 
 if ($video['error'] !== UPLOAD_ERR_OK) {
     $erroresVideo = [
-        UPLOAD_ERR_INI_SIZE =>
-            'El video supera el límite de carga configurado en PHP.',
-        UPLOAD_ERR_FORM_SIZE =>
-            'El video supera el tamaño permitido.',
-        UPLOAD_ERR_PARTIAL =>
-            'El video se recibió incompleto. Intenta nuevamente.',
-        UPLOAD_ERR_NO_FILE =>
-            'Debes seleccionar un video.',
-        UPLOAD_ERR_NO_TMP_DIR =>
-            'No se encontró la carpeta temporal de carga.',
-        UPLOAD_ERR_CANT_WRITE =>
-            'No fue posible guardar el archivo temporal.',
-        UPLOAD_ERR_EXTENSION =>
-            'PHP detuvo la carga del video.'
+        UPLOAD_ERR_INI_SIZE   => 'El video supera el límite de carga configurado en PHP.',
+        UPLOAD_ERR_FORM_SIZE  => 'El video supera el tamaño permitido.',
+        UPLOAD_ERR_PARTIAL    => 'El video se recibió incompleto. Intenta nuevamente.',
+        UPLOAD_ERR_NO_FILE    => 'Debes seleccionar un video.',
+        UPLOAD_ERR_NO_TMP_DIR => 'No se encontró la carpeta temporal de carga.',
+        UPLOAD_ERR_CANT_WRITE => 'No fue posible guardar el archivo temporal.',
+        UPLOAD_ERR_EXTENSION  => 'PHP detuvo la carga del video.'
     ];
-
-    tes_error_subida(
-        $erroresVideo[$video['error']] ?? 'Ocurrió un error al recibir el video.'
-    );
+    tes_error_subida($erroresVideo[$video['error']] ?? 'Ocurrió un error al recibir el video.');
 }
 
 if (
@@ -183,30 +173,26 @@ if ($video['size'] <= 0 || $video['size'] > $limiteVideo) {
 }
 
 // Comprobar extensión.
-$extension = strtolower(
-    pathinfo($video['name'], PATHINFO_EXTENSION)
-);
-
+$extension = strtolower(pathinfo($video['name'], PATHINFO_EXTENSION));
 $extensionesPermitidas = ['mp4', 'webm'];
 
 if (!in_array($extension, $extensionesPermitidas, true)) {
     tes_error_subida('Solo se permiten videos MP4 y WebM.');
 }
 
-// Comprobar MIME real del archivo.
+// Comprobar MIME real (Validación relajada)
 $finfo = new finfo(FILEINFO_MIME_TYPE);
 $mime = $finfo->file($video['tmp_name']);
 
 $mimesPermitidos = [
-    'mp4'  => 'video/mp4',
-    'webm' => 'video/webm'
+    'video/mp4',
+    'video/webm',
+    'video/quicktime',         // Para videos de iPhone
+    'application/octet-stream' // Para videos descargados o de algunas cámaras
 ];
 
-if (
-    !isset($mimesPermitidos[$extension]) ||
-    $mime !== $mimesPermitidos[$extension]
-) {
-    tes_error_subida('El formato real del video no coincide con su extensión.');
+if (!in_array($mime, $mimesPermitidos, true)) {
+    tes_error_subida('El archivo no es un video válido. Sube un MP4 o WebM.');
 }
 
 // --------------------------------------------------
