@@ -1,10 +1,10 @@
 <?php
-require_once '../../nucleo/comun.php';
+require_once __DIR__ . '/../../../nucleo/comun.php';
 requerir_rol('coordinacion'); 
 
 // Si alguien intenta abrir este archivo directo desde el navegador, lo regresamos.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirigir('admin.php');
+    redirigir('index.php');
 }
 
 // Obtenemos los datos que envió el formulario
@@ -15,7 +15,7 @@ $motivo = post('motivo');
 // Validamos que el ID sea correcto
 if ($id <= 0) {
     mensaje('error', 'ID inválido.');
-    redirigir('admin.php');
+    redirigir('index.php');
 }
 
 $conexion = bd();
@@ -31,7 +31,7 @@ if ($accion === 'publicar') {
     // TU TAREA: Validar que el motivo no esté vacío.
     if (empty(trim($motivo))) {
         mensaje('error', '¡El motivo de rechazo es obligatorio!');
-        redirigir('admin.php');
+        redirigir('index.php');
     }
     
     // Actualizamos el estado y guardamos el motivo en la base de datos
@@ -41,5 +41,5 @@ if ($accion === 'publicar') {
 }
 
 // Regresamos al panel
-redirigir('admin.php');
+redirigir('index.php');
 ?>

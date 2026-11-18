@@ -1,6 +1,6 @@
 <?php
 // 1. Traemos el núcleo (seguridad, conexión a base de datos, diseño).
-require_once '../../nucleo/comun.php';
+require_once __DIR__ . '/../../../nucleo/comun.php';
 
 // 2. Seguridad: Solo el rol de coordinador/moderador puede entrar aquí.
 requerir_rol('coordinacion'); 
