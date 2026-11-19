@@ -12,9 +12,11 @@ if (!is_string($_POST['token'] ?? null)) {
 }
 verificar_token();
 
-$id = entero(post('id'));
-$accion = post('accion');
-$motivo = post('motivo');
+$id = $_POST['id'] ?? '';
+$accion = $_POST['accion'] ?? '';
+$motivo = $_POST['motivo'] ?? '';
+$id = is_string($id) ? entero($id) : null;
+$motivo = is_string($motivo) ? trim($motivo) : '';
 
 if ($id === null || !in_array($accion, ['publicar', 'rechazar'], true)) {
     mensaje('error', 'El testimonio o la acción no son válidos.');

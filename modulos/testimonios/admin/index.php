@@ -2,44 +2,73 @@
 require_once __DIR__ . '/../../../nucleo/comun.php';
 requerir_rol('coordinacion');
 
+$estados = ['pendiente' => 'Pendiente', 'aprobado' => 'Aprobado', 'rechazado' => 'Rechazado'];
+$filtro = $_GET['estado'] ?? '';
+if (!is_string($filtro) || !isset($estados[$filtro])) {
+    $filtro = '';
+}
+
 $consulta = bd()->prepare(
-    'SELECT t.id, t.nombre, t.testimonio, t.estado, c.nombre AS carrera
+    'SELECT t.id, t.nombre, t.testimonio, t.estado, t.video_archivo, c.nombre AS carrera
      FROM tes_testimonios AS t
      JOIN carreras AS c ON c.id = t.carrera_id
+     WHERE (? = \'\' OR t.estado = ?)
      ORDER BY t.creado_en DESC, t.id DESC'
 );
-$consulta->execute();
+$consulta->execute([$filtro, $filtro]);
 $testimonios = $consulta->fetchAll();
 
-cabecera('Panel de Moderación');
+cabecera('Panel de Moderación', '', '../css/admin.css');
 ?>
 
 <section class="contenedor seccion">
     <h1>Bandeja de Moderación TES</h1>
     <?php pintar_mensajes(); ?>
+    <form class="tes-filtro" method="GET" action="index.php">
+        <label class="campo__etiqueta" for="estado">Filtrar por estado</label>
+        <select class="campo__control" id="estado" name="estado">
+            <option value="">Todos</option>
+            <?php foreach ($estados as $valor => $etiqueta): ?>
+                <option value="<?= e($valor) ?>" <?= $filtro === $valor ? 'selected' : '' ?>>
+                    <?= e($etiqueta) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <button class="boton boton--secundario" type="submit">Filtrar</button>
+    </form>
 
     <?php if (!$testimonios): ?>
-        <p>Aún no hay testimonios.</p>
+        <p>No hay testimonios para mostrar.</p>
     <?php else: ?>
         <div class="tabla-envoltura">
-            <table class="tabla">
-                <thead>
-                    <tr>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Carrera</th>
-                        <th scope="col">Testimonio</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
+            <table class="tabla tes-tabla" role="table" aria-label="Testimonios">
+                <thead role="rowgroup">
+                    <tr role="row">
+                        <th scope="col" role="columnheader">Nombre</th>
+                        <th scope="col" role="columnheader">Carrera</th>
+                        <th scope="col" role="columnheader">Testimonio</th>
+                        <th scope="col" role="columnheader">Estado</th>
+                        <th scope="col" role="columnheader">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody role="rowgroup">
                     <?php foreach ($testimonios as $t): ?>
-                        <tr>
-                            <td><?= e($t['nombre']) ?></td>
-                            <td><?= e($t['carrera']) ?></td>
-                            <td><?= e($t['testimonio']) ?></td>
-                            <td><?= e(ucfirst($t['estado'])) ?></td>
-                            <td>
+                        <tr role="row">
+                            <td role="cell"><span class="tes-etiqueta" aria-hidden="true">Nombre</span><?= e($t['nombre']) ?></td>
+                            <td role="cell"><span class="tes-etiqueta" aria-hidden="true">Carrera</span><?= e($t['carrera']) ?></td>
+                            <td role="cell" class="tes-texto">
+                                <span class="tes-etiqueta" aria-hidden="true">Testimonio</span>
+                                <?= e($t['testimonio']) ?>
+                                <?php if ($t['video_archivo']): ?>
+                                    <a class="tes-video" href="video.php?id=<?= (int) $t['id'] ?>">Descargar video</a>
+                                <?php endif; ?>
+                            </td>
+                            <td role="cell">
+                                <span class="tes-etiqueta" aria-hidden="true">Estado</span>
+                                <span class="insignia"><?= e($estados[$t['estado']] ?? $t['estado']) ?></span>
+                            </td>
+                            <td role="cell" class="tes-acciones">
+                                <span class="tes-etiqueta" aria-hidden="true">Acciones</span>
                                 <?php if ($t['estado'] === 'pendiente'): ?>
                                     <form method="POST" action="actualizar_estado.php">
                                         <?= campo_token() ?>
@@ -56,9 +85,13 @@ cabecera('Panel de Moderación');
                                         <button class="boton boton--peligro boton--pequeno"
                                                 type="submit" name="accion" value="rechazar">Rechazar</button>
                                     </form>
-                                <?php else: ?>
-                                    —
                                 <?php endif; ?>
+                                <form method="POST" action="eliminar_testimonio.php" class="mt-4"
+                                      onsubmit="return confirm('¿Eliminar este testimonio?');">
+                                    <?= campo_token() ?>
+                                    <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
+                                    <button class="boton boton--peligro boton--pequeno" type="submit">Eliminar</button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
