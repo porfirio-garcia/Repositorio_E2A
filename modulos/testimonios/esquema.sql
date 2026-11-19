@@ -91,34 +91,22 @@ CREATE TABLE IF NOT EXISTS tes_historial (
 
 
 -- -----------------------------------------------------------------------------
--- Datos de prueba
--- Ejecutar este bloque una sola vez para evitar duplicados.
+-- Etiquetas de los testimonios
 -- -----------------------------------------------------------------------------
 
-INSERT INTO tes_testimonios
-    (nombre, tipo_persona, carrera_id, generacion, testimonio, estado)
-VALUES
-    (
-        'Estudiante de prueba',
-        'estudiante',
-        (SELECT id FROM carreras WHERE clave = 'AGR'),
-        '2024-2027',
-        'Este es un testimonio de prueba para demostrar el modulo.',
-        'pendiente'
-    ),
-    (
-        'Egresado de prueba',
-        'egresado',
-        (SELECT id FROM carreras WHERE clave = 'AGR'),
-        '2020-2023',
-        'Este es un testimonio aprobado de ejemplo.',
-        'aprobado'
-    ),
-    (
-        'Segundo estudiante',
-        'estudiante',
-        (SELECT id FROM carreras WHERE clave = 'AGR'),
-        NULL,
-        'Este testimonio de ejemplo fue rechazado.',
-        'rechazado'
-    );
+CREATE TABLE IF NOT EXISTS tes_etiquetas (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    UNIQUE KEY uq_tes_etiquetas_nombre (nombre)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS tes_testimonio_etiqueta (
+    testimonio_id INT UNSIGNED NOT NULL,
+    etiqueta_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (testimonio_id, etiqueta_id),
+    KEY ix_tes_testimonio_etiqueta (etiqueta_id, testimonio_id),
+    CONSTRAINT fk_tes_etiquetas_testimonio
+        FOREIGN KEY (testimonio_id) REFERENCES tes_testimonios(id) ON DELETE CASCADE,
+    CONSTRAINT fk_tes_etiquetas_etiqueta
+        FOREIGN KEY (etiqueta_id) REFERENCES tes_etiquetas(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

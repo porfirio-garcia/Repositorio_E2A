@@ -1,13 +1,14 @@
 # Moderación de testimonios
 
 1. Entra como **Coordinación** y abre **Panel → Testimonios**. También puedes abrir `modulos/testimonios/admin/index.php` desde la dirección local del proyecto.
-2. Filtra por **Pendiente**, **Aprobado**, **Rechazado** o **Todos**. Revisa el texto y, si se adjuntó un video, descárgalo desde la bandeja.
+2. Filtra por **Pendiente**, **Publicado**, **Rechazado** o **Todos**. Revisa el texto y, si se adjuntó un video, descárgalo desde la bandeja.
 3. Pulsa **Publicar** para guardar el estado `aprobado`, o escribe un motivo y pulsa **Rechazar**. El motivo debe tener de 1 a 300 caracteres. Solo se pueden moderar testimonios pendientes.
-4. **Eliminar** pide confirmación y debe usarse con datos de prueba durante la demostración. El borrado quita el registro y el esquema elimina su historial asociado. El archivo de video permanece en el almacenamiento.
+4. Abre **Administrar etiquetas** para gestionar el catálogo. En cada testimonio, usa **Editar etiquetas** para asignar una o varias.
+5. **Eliminar** pide confirmación y debe usarse con datos de prueba durante la demostración. El borrado quita el registro y el esquema elimina su historial y sus asignaciones de etiquetas. El archivo de video permanece en el almacenamiento.
 
 ## Instalación para pruebas
 
-En una base de prueba limpia, importa `sql/01-nucleo.sql` y luego `modulos/testimonios/esquema.sql`. Crea las cuentas de prueba del núcleo y entra como Coordinación. Si ya tienes la tabla provisional de la primera versión, usa una base de prueba separada: importar el esquema encima no cambia las columnas de una tabla que ya existe.
+En una base de prueba limpia, importa `sql/01-nucleo.sql` y luego `modulos/testimonios/esquema.sql`. Si quieres ejemplos, importa también `modulos/testimonios/datos_prueba.sql`. Crea las cuentas de prueba del núcleo y entra como Coordinación. Si ya tienes la tabla provisional de la primera versión, usa una base de prueba separada: importar el esquema encima no cambia las columnas de una tabla que ya existe.
 
 ## Cómo funciona
 

@@ -62,7 +62,7 @@ try {
     $historial->execute([$id, $estado, $motivo, $moderador]);
 
     $conexion->commit();
-    mensaje('exito', $estado === 'aprobado' ? 'Testimonio aprobado.' : 'Testimonio rechazado.');
+    mensaje('exito', $estado === 'aprobado' ? 'Testimonio publicado.' : 'Testimonio rechazado.');
 } catch (PDOException $error) {
     if ($conexion->inTransaction()) {
         $conexion->rollBack();

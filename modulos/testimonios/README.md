@@ -1,65 +1,14 @@
-# Módulo <CLAVE> · <Nombre del módulo>
+# TES · Testimonios UTBB
 
-**Equipo:** <A-1>
-**Prefijo de tablas:** `<xxx_>`
-**Carrera cuyo contenido produce el equipo:** <Carrera>
+## Instalación
 
-## Qué resuelve
+1. Configura el núcleo según el README de la raíz e importa `sql/01-nucleo.sql` si es una instalación nueva.
+2. Ejecuta `modulos/testimonios/esquema.sql`. Si ya tienes el módulo instalado, puedes volver a ejecutar este archivo para incorporar las tablas de etiquetas. Conserva los testimonios y el historial existentes.
+3. Para probar con ejemplos en una base local, importa `modulos/testimonios/datos_prueba.sql` una sola vez.
+4. Si vas a recibir videos, comprueba que PHP pueda escribir en `modulos/testimonios/video/`. En XAMPP, Apache debe aplicar el `.htaccess` de esta carpeta. Si usas otro servidor, configura el bloqueo de acceso HTTP directo a la carpeta. Para aceptar archivos de 35 MB, configura `upload_max_filesize = 35M` y `post_max_size = 40M` o superiores en `php.ini`.
 
-Dos o tres frases. Qué problema atiende el módulo y para quién.
+## Flujo
 
-## Pantallas
-
-| Pantalla | Archivo | Quién entra |
-|---|---|---|
-| Listado público | `index.php` | Cualquiera |
-| Detalle | `ficha.php?id=` | Cualquiera |
-| Panel | `admin/index.php` | <rol> |
-| Alta y edición | `admin/editar.php` | <rol> |
-| Baja | `admin/eliminar.php` | <rol> |
-
-## Tablas
-
-| Tabla | Para qué | Relaciones |
-|---|---|---|
-| `<xxx>_...` | | |
-
-Referencias al núcleo: `usuarios`, `carreras`. Ninguna a otro módulo.
-
-## Roles
-
-| Rol | Qué puede hacer |
-|---|---|
-| | |
-
-## Proceso de estados
-
-```
-borrador → revision → publicado
-                   ↘ rechazado
-```
-
-Quién puede provocar cada cambio y con qué condiciones.
-
-## Archivos que recibe
-
-| Qué | Tipos | Tamaño máximo | Quién lo descarga |
-|---|---|---|---|
-| | | | |
-
-## Credenciales de prueba
-
-| Correo | Rol |
-|---|---|
-| | |
-
-## Plan de pruebas ejecutado
-
-| # | Qué se probó | Resultado |
-|---|---|---|
-| 1 | | |
-
-## Pendientes conocidos
-
-Lo que no quedó y por qué. Es preferible declararlo a que aparezca en la
-prueba cruzada.
+- Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. La generación y el video para revisión son opcionales.
+- Coordinación entra a `modulos/testimonios/admin/` para publicar o rechazar los envíos pendientes. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
+- El listado público muestra los testimonios publicados de nueve en nueve. Permite filtrar por etiqueta y tipo de persona. Las tarjetas muestran hasta 100 caracteres y un enlace **Leer más** si tienen texto adicional. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación.

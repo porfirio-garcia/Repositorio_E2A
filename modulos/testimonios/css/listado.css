@@ -1,60 +1,47 @@
-/* Diseño para las tarjetas de testimonios */
-#testimonios .rejilla {
+.tes-encabezado,
+.tes-filtros {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
+    gap: var(--e4);
+    align-items: center;
+    justify-content: space-between;
 }
 
-#testimonios .tarjeta {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    width: 100%;
-    max-width: 350px;
-    border-top: 4px solid #0056b3; /* Color de la UTBB */
+.tes-filtros {
+    align-items: end;
+    justify-content: flex-start;
+    margin-block: var(--e5);
+}
+
+.tes-filtros .campo {
+    flex: 0 1 14rem;
+    margin: 0;
+}
+
+.tes-tarjeta,
+.tes-texto-completo {
+    overflow-wrap: anywhere;
+}
+
+.tes-etiquetas {
     display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--e2);
 }
 
-#testimonios .tarjeta:hover {
-    transform: translateY(-5px);
+.tes-etiquetas a {
+    text-decoration: none;
 }
 
-#testimonios .tarjeta__cuerpo {
-    padding: 20px;
-    flex-grow: 1;
+.tes-etiquetas a:hover {
+    text-decoration: underline;
 }
 
-#testimonios .tarjeta__titulo {
-    margin-top: 0;
-    color: #0056b3;
-    font-size: 1.2rem;
+.tes-ficha {
+    margin-block-start: var(--e5);
 }
 
-#testimonios .tarjeta__pie {
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    border-top: 1px solid #eee;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    text-align: right;
-}
-
-#testimonios .insignia--info {
-    background-color: #e2f0d9;
-    color: #385723;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-/* Para que se vea bien en celulares */
-@media (max-width: 600px) {
-    #testimonios .tarjeta {
-        max-width: 100%;
-    }
+.tes-texto-completo {
+    white-space: pre-wrap;
 }

@@ -67,3 +67,26 @@
         font-weight: 600;
     }
 }
+
+.tes-opcion-etiqueta,
+.tes-editar-enlace {
+    display: block;
+    margin-block: var(--e2);
+}
+
+.tes-editar-etiqueta,
+.tes-renombrar-etiqueta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--e2);
+}
+
+.tes-editar-etiqueta {
+    margin-block: var(--e3);
+}
+
+.tes-renombrar-etiqueta .campo__control {
+    width: auto;
+    max-width: 100%;
+}

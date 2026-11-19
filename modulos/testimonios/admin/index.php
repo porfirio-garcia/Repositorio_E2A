@@ -1,8 +1,9 @@
 <?php
 require_once __DIR__ . '/../../../nucleo/comun.php';
 requerir_rol('coordinacion');
+require_once __DIR__ . '/../includes/etiquetas.php';
 
-$estados = ['pendiente' => 'Pendiente', 'aprobado' => 'Aprobado', 'rechazado' => 'Rechazado'];
+$estados = ['pendiente' => 'Pendiente', 'aprobado' => 'Publicado', 'rechazado' => 'Rechazado'];
 $filtro = $_GET['estado'] ?? '';
 if (!is_string($filtro) || !isset($estados[$filtro])) {
     $filtro = '';
@@ -17,6 +18,7 @@ $consulta = bd()->prepare(
 );
 $consulta->execute([$filtro, $filtro]);
 $testimonios = $consulta->fetchAll();
+$etiquetas = tes_etiquetas_por_testimonio(array_column($testimonios, 'id'));
 
 cabecera('Panel de Moderación', '', '../css/admin.css');
 ?>
@@ -24,6 +26,7 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
 <section class="contenedor seccion">
     <h1>Bandeja de Moderación TES</h1>
     <?php pintar_mensajes(); ?>
+    <p><a class="boton boton--secundario" href="etiquetas.php">Administrar etiquetas</a></p>
     <form class="tes-filtro" method="GET" action="index.php">
         <label class="campo__etiqueta" for="estado">Filtrar por estado</label>
         <select class="campo__control" id="estado" name="estado">
@@ -48,6 +51,7 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
                         <th scope="col" role="columnheader">Carrera</th>
                         <th scope="col" role="columnheader">Testimonio</th>
                         <th scope="col" role="columnheader">Estado</th>
+                        <th scope="col" role="columnheader">Etiquetas</th>
                         <th scope="col" role="columnheader">Acciones</th>
                     </tr>
                 </thead>
@@ -66,6 +70,15 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
                             <td role="cell">
                                 <span class="tes-etiqueta" aria-hidden="true">Estado</span>
                                 <span class="insignia"><?= e($estados[$t['estado']] ?? $t['estado']) ?></span>
+                            </td>
+                            <td role="cell">
+                                <span class="tes-etiqueta" aria-hidden="true">Etiquetas</span>
+                                <?php foreach ($etiquetas[$t['id']] ?? [] as $tag): ?>
+                                    <span class="insignia insignia--info"><?= e($tag['nombre']) ?></span>
+                                <?php endforeach; ?>
+                                <a class="tes-editar-enlace" href="etiquetas.php?testimonio_id=<?= (int) $t['id'] ?>">
+                                    Editar etiquetas
+                                </a>
                             </td>
                             <td role="cell" class="tes-acciones">
                                 <span class="tes-etiqueta" aria-hidden="true">Acciones</span>
