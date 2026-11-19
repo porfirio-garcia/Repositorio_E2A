@@ -178,4 +178,5 @@ pintar_mensajes();
 
     </section>
 
+<script src="../assets/js/tes.js" defer></script>
 <?php pie(); ?>
