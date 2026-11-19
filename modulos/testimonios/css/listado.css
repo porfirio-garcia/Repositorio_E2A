@@ -1,0 +1,60 @@
+/* Diseño para las tarjetas de testimonios */
+#testimonios .rejilla {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#testimonios .tarjeta {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 350px;
+    border-top: 4px solid #0056b3; /* Color de la UTBB */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+#testimonios .tarjeta:hover {
+    transform: translateY(-5px);
+}
+
+#testimonios .tarjeta__cuerpo {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+#testimonios .tarjeta__titulo {
+    margin-top: 0;
+    color: #0056b3;
+    font-size: 1.2rem;
+}
+
+#testimonios .tarjeta__pie {
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-top: 1px solid #eee;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: right;
+}
+
+#testimonios .insignia--info {
+    background-color: #e2f0d9;
+    color: #385723;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* Para que se vea bien en celulares */
+@media (max-width: 600px) {
+    #testimonios .tarjeta {
+        max-width: 100%;
+    }
+}
