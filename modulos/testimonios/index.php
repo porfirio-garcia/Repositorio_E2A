@@ -34,7 +34,7 @@ cabecera('Testimonios', '', 'css/listado.css');
             <h1>Testimonios</h1>
             <p class="entradilla">Conoce las experiencias de estudiantes, egresados y familiares de la comunidad UTBB.</p>
         </div>
-        <a class="boton boton--acento" href="formulario.php">Subir testimonio</a>
+        
     </header>
 
     <form class="tes-filtros" method="get" action="index.php">
@@ -126,4 +126,5 @@ cabecera('Testimonios', '', 'css/listado.css');
     <?php endif; ?>
 </section>
 
+<?php require __DIR__ . '/includes/cta.php'; ?>
 <?php pie(); ?>
