@@ -11,7 +11,6 @@ $carreraId = filter_input(
     FILTER_VALIDATE_INT,
     ['options' => ['min_range' => 1]]
 ) ?: null;
-$etiqueta = filter_input(INPUT_GET, 'etiqueta', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: null;
 $tipo = $_GET['tipo'] ?? '';
 $tipos = ['estudiante' => 'Estudiantes', 'egresado' => 'Egresados', 'familiar' => 'Familiares'];
 $tipo = is_string($tipo) && isset($tipos[$tipo]) ? $tipo : null;
@@ -33,7 +32,7 @@ cabecera('Testimonios', '', 'css/listado.css');
     <header class="tes-encabezado">
         <div>
             <h1>Testimonios</h1>
-            <p class="entradilla">Conoce las experiencias de estudiantes y familiares de la comunidad UTBB.</p>
+            <p class="entradilla">Conoce las experiencias de estudiantes, egresados y familiares de la comunidad UTBB.</p>
         </div>
         <a class="boton boton--acento" href="formulario.php">Subir testimonio</a>
     </header>
@@ -101,10 +100,9 @@ cabecera('Testimonios', '', 'css/listado.css');
                     <?php if (isset($etiquetas[$t['id']])): ?>
                         <div class="tarjeta__pie tes-etiquetas">
                             <?php foreach ($etiquetas[$t['id']] as $tag): ?>
-                                <a class="insignia insignia--info"
-                                   href="<?= e('?' . http_build_query(['etiqueta' => $tag['id']] + $filtrosActivos)) ?>">
+                                <span class="insignia insignia--info">
                                     <?= e($tag['nombre']) ?>
-                                </a>
+                                </span>
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
