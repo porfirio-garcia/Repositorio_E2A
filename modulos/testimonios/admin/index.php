@@ -12,7 +12,7 @@ if (!is_string($filtro) || !isset($estados[$filtro])) {
 $consulta = bd()->prepare(
     'SELECT t.id, t.nombre, t.testimonio, t.estado, t.video_archivo, c.nombre AS carrera
      FROM tes_testimonios AS t
-     JOIN carreras AS c ON c.id = t.carrera_id
+     LEFT JOIN carreras AS c ON c.id = t.carrera_id
      WHERE (? = \'\' OR t.estado = ?)
      ORDER BY t.creado_en DESC, t.id DESC'
 );
@@ -59,7 +59,7 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
                     <?php foreach ($testimonios as $t): ?>
                         <tr role="row">
                             <td role="cell"><span class="tes-etiqueta" aria-hidden="true">Nombre</span><?= e($t['nombre']) ?></td>
-                            <td role="cell"><span class="tes-etiqueta" aria-hidden="true">Carrera</span><?= e($t['carrera']) ?></td>
+                            <td role="cell"><span class="tes-etiqueta" aria-hidden="true">Carrera</span><?= e($t['carrera'] ?? 'No especificada') ?></td>
                             <td role="cell" class="tes-texto">
                                 <span class="tes-etiqueta" aria-hidden="true">Testimonio</span>
                                 <?= e($t['testimonio']) ?>

@@ -12,3 +12,16 @@
 - Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. La generación y el video para revisión son opcionales.
 - Coordinación entra a `modulos/testimonios/admin/` para publicar o rechazar los envíos pendientes. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
 - El listado público muestra los testimonios publicados de nueve en nueve. Permite filtrar por etiqueta y tipo de persona. Las tarjetas muestran hasta 100 caracteres y un enlace **Leer más** si tienen texto adicional. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación.
+## Tipos de persona
+
+El módulo permite registrar testimonios de:
+
+- Estudiantes
+- Egresados
+- Familiares
+
+La carrera es obligatoria para estudiantes y egresados,
+pero opcional para familiares.
+
+Los testimonios enviados quedan pendientes de moderación.
+Solo los aprobados aparecen en el listado público.

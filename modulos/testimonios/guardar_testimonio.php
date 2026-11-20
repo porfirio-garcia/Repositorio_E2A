@@ -58,11 +58,14 @@ if ($datos['nombre'] === '' || mb_strlen($datos['nombre']) > 100) {
 if (!in_array($datos['tipo_persona'], ['estudiante', 'egresado'], true)) {
     tes_error_subida('Selecciona un tipo de persona válido.', $datos);
 }
-if ($carreraId === null) {
+if ($datos['tipo_persona'] !== 'familiar' && $carreraId === null) {
     tes_error_subida('Selecciona una carrera válida.', $datos);
 }
-if (mb_strlen($datos['generacion']) > 20) {
-    tes_error_subida('La generación admite hasta 20 caracteres.', $datos);
+if ($datos['tipo_persona'] === 'familiar' && $datos['carrera_id'] === '') {
+    $carreraId = null;
+}
+if (!in_array($datos['tipo_persona'], ['estudiante', 'egresado', 'familiar'], true)) {
+    tes_error_subida('Selecciona un tipo de persona válido.', $datos);
 }
 if ($longitud < 20 || $longitud > 3000) {
     tes_error_subida('Escribe un testimonio de 20 a 3000 caracteres.', $datos);
@@ -71,11 +74,20 @@ if (($_POST['consentimiento'] ?? '') !== '1') {
     tes_error_subida('Confirma que aceptas la publicación de tu testimonio.', $datos);
 }
 
-$consulta = bd()->prepare('SELECT id FROM carreras WHERE id = ? AND activa = 1');
-$consulta->execute([$carreraId]);
-if (!$consulta->fetchColumn()) {
-    tes_error_subida('La carrera seleccionada no está disponible.', $datos);
+if ($carreraId !== null) {
+    $consulta = bd()->prepare(
+        'SELECT id FROM carreras WHERE id = ? AND activa = 1'
+    );
+
+    $consulta->execute([$carreraId]);
+
+    if (!$consulta->fetchColumn()) {
+        tes_error_subida('La carrera seleccionada no está disponible.', $datos);
+    }
+} elseif ($datos['carrera_id'] !== '') {
+    tes_error_subida('Selecciona una carrera válida.', $datos);
 }
+
 
 /** Guarda el video opcional con extensión generada a partir del tipo real. */
 function tes_guardar_video(array $video): ?string

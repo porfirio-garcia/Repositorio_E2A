@@ -10,14 +10,19 @@
                 return '';
             },
             tipo_persona: (valor) => {
-                return ['estudiante', 'egresado'].includes(valor)
-                    ? ''
-                    : 'Selecciona estudiante o egresado.';
-            },
+    return ['estudiante', 'egresado', 'familiar'].includes(valor)
+        ? ''
+        : 'Selecciona estudiante, egresado o familiar.';
+},
             carrera_id: (valor) => {
-                if (!valor) return 'Indica tu carrera.';
-                return '';
-            },
+    const tipo = formulario.elements.namedItem('tipo_persona').value;
+
+    if (tipo !== 'familiar' && !valor) {
+        return 'Selecciona tu carrera.';
+    }
+
+    return '';
+},
             generacion: (valor) => {
                 return [...valor].length > 20
                     ? 'La generación admite hasta 20 caracteres.'

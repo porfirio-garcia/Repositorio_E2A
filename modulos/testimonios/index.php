@@ -6,7 +6,7 @@ require_once __DIR__ . '/obtener_testimonios.php';
 $opcionesEtiqueta = tes_etiquetas_publicas();
 $etiqueta = filter_input(INPUT_GET, 'etiqueta', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: null;
 $tipo = $_GET['tipo'] ?? '';
-$tipos = ['estudiante' => 'Estudiantes', 'egresado' => 'Egresados'];
+$tipos = ['estudiante' => 'Estudiantes', 'egresado' => 'Egresados', 'familiar' => 'Familiares'];
 $tipo = is_string($tipo) && isset($tipos[$tipo]) ? $tipo : null;
 $pagina = filter_input(INPUT_GET, 'pagina', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 1;
 
@@ -26,7 +26,7 @@ cabecera('Testimonios', '', 'css/listado.css');
     <header class="tes-encabezado">
         <div>
             <h1>Testimonios</h1>
-            <p class="entradilla">Conoce las experiencias de estudiantes y egresados de la UTBB.</p>
+            <p class="entradilla">Conoce las experiencias de estudiantes y familiares de la comunidad UTBB.</p>
         </div>
         <a class="boton boton--acento" href="formulario.php">Subir testimonio</a>
     </header>
@@ -69,8 +69,15 @@ cabecera('Testimonios', '', 'css/listado.css');
                     <div class="tarjeta__cuerpo">
                         <h2 class="tarjeta__titulo"><?= e($t['nombre']) ?></h2>
                         <p class="leyenda">
-                            <?= e(ucfirst($t['tipo_persona'])) ?> · <?= e($t['carrera']) ?>
-                            <?= $t['generacion'] ? ' · ' . e($t['generacion']) : '' ?>
+                            <?= e(ucfirst($t['tipo_persona'])) ?>
+
+<?php if (!empty($t['carrera'])): ?>
+    · <?= e($t['carrera']) ?>
+<?php endif; ?>
+
+<?php if (!empty($t['generacion'])): ?>
+    · <?= e($t['generacion']) ?>
+<?php endif; ?>
                         </p>
                         <p><?= e($t['extracto']) ?><?= $t['tiene_mas'] ? '…' : '' ?></p>
                         <?php if ($t['tiene_mas']): ?>

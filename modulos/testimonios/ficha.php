@@ -20,8 +20,15 @@ cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css');
     <article class="ancho-lectura tes-ficha">
         <h1><?= e($testimonio['nombre']) ?></h1>
         <p class="leyenda">
-            <?= e(ucfirst($testimonio['tipo_persona'])) ?> · <?= e($testimonio['carrera']) ?>
-            <?= $testimonio['generacion'] ? ' · ' . e($testimonio['generacion']) : '' ?>
+            <?= e(ucfirst($testimonio['tipo_persona'])) ?>
+
+<?php if (!empty($testimonio['carrera'])): ?>
+    · <?= e($testimonio['carrera']) ?>
+<?php endif; ?>
+
+<?php if (!empty($testimonio['generacion'])): ?>
+    · <?= e($testimonio['generacion']) ?>
+<?php endif; ?>
         </p>
         <p class="tes-texto-completo"><?= e($testimonio['testimonio']) ?></p>
         <?php if ($etiquetas): ?>

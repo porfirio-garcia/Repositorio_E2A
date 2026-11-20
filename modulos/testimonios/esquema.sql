@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS tes_testimonios (
 
     nombre VARCHAR(100) NOT NULL,
 
-    tipo_persona ENUM('estudiante', 'egresado')
+    tipo_persona ENUM('estudiante', 'egresado','Familiar')
         NOT NULL,
 
     carrera_id INT UNSIGNED NOT NULL,

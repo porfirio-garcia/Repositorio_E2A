@@ -50,7 +50,7 @@ function tes_listar_publicados(?int $etiqueta, ?string $tipo, int $pagina): arra
         "SELECT t.id, t.nombre, t.tipo_persona, t.generacion, c.nombre AS carrera,
                 LEFT(t.testimonio, 100) AS extracto, CHAR_LENGTH(t.testimonio) > 100 AS tiene_mas
          FROM tes_testimonios t
-         JOIN carreras c ON c.id = t.carrera_id
+         LEFT JOIN carreras c ON c.id = t.carrera_id
          WHERE $donde
          ORDER BY t.creado_en DESC, t.id DESC
          LIMIT $limite OFFSET $desde"
@@ -69,7 +69,7 @@ function tes_obtener_publicado(int $id): ?array
     $consulta = bd()->prepare(
         "SELECT t.id, t.nombre, t.tipo_persona, t.generacion, t.testimonio, c.nombre AS carrera
          FROM tes_testimonios t
-         JOIN carreras c ON c.id = t.carrera_id
+         LEFT JOIN carreras c ON c.id = t.carrera_id
          WHERE t.id = ? AND t.estado = 'aprobado'"
     );
     $consulta->execute([$id]);

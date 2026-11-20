@@ -25,8 +25,9 @@ cabecera('Subir testimonio', '', 'css/modulo.css');
         <?php pintar_mensajes(); ?>
 
         <p>
-            Comparte tu experiencia como estudiante o egresado de la UTBB.
-            El equipo de coordinación revisará tu envío antes de publicarlo.
+             Comparte tu experiencia como estudiante, egresado o familiar
+    de un estudiante de la UTBB.
+    El equipo de coordinación revisará tu envío antes de publicarlo.
         </p>
 
         <form
@@ -83,19 +84,24 @@ cabecera('Subir testimonio', '', 'css/modulo.css');
                     >
                         Egresado
                     </option>
+                    <option
+    value="familiar"
+    <?= ($datosFormulario['tipo_persona'] ?? '') === 'familiar' ? 'selected' : '' ?>
+>
+    Familiar
+</option>   
                 </select>
             </div>
 
             <div class="campo">
                 <label class="campo__etiqueta" for="carrera_id">
-                    Carrera *
+                    Carrera (opcional para familiares)
                 </label>
 
                 <select
                     class="campo__control"
                     id="carrera_id"
                     name="carrera_id"
-                    required
                 >
                     <option value="">Selecciona una carrera</option>
 
@@ -127,7 +133,8 @@ cabecera('Subir testimonio', '', 'css/modulo.css');
                 >
 
                 <small class="campo__ayuda">
-                    Campo opcional.
+                    Obligatoria para estudiantes y egresados.
+    Opcional para familiares.
                 </small>
             </div>
 
