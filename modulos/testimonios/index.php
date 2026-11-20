@@ -25,7 +25,7 @@ $filtrosActivos = array_filter(['carrera' => $carreraId, 'tipo' => $tipo]);
 
 $enlacePagina = static fn (int $numero): string => '?' . http_build_query($filtrosActivos + ['pagina' => $numero]);
 
-cabecera('Testimonios', '', 'css/listado.css');
+cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/listado.css'));
 ?>
 
 <section class="contenedor seccion" id="testimonios">
