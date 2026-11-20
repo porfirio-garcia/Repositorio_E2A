@@ -24,10 +24,8 @@ function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina): arr
     $valores = [];
 
     if ($carreraId !== null) {
-    $condiciones[] = 't.carrera_id = ?';
-    $valores[] = $carreraId;
-}
-        $valores[] = $etiqueta;
+        $condiciones[] = 't.carrera_id = ?';
+        $valores[] = $carreraId;
     }
 
     if ($tipo !== null) {
