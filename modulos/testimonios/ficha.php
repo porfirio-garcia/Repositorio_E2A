@@ -12,7 +12,7 @@ if ($testimonio === null) {
 
 $etiquetas = tes_etiquetas_por_testimonio([$id])[$id] ?? [];
 
-cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css');
+cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/listado.css'));
 ?>
 
 <section class="contenedor seccion">
