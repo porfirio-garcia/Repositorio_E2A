@@ -45,3 +45,73 @@
 .tes-texto-completo {
     white-space: pre-wrap;
 }
+
+/* Invitación fija: acompaña la lectura sin tapar los controles del sitio. */
+.tes-cta-flotante {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 30;
+    box-sizing: border-box;
+    width: min(19rem, calc(100vw - 3rem));
+    padding: 1.25rem;
+    border: 1px solid var(--marca-700);
+    border-radius: 1rem;
+    background: var(--marca-100, #eaf4ef);
+    color: #17382c;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+}
+
+.tes-cta-flotante__etiqueta {
+    display: block;
+    margin-bottom: .35rem;
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .09em;
+}
+
+.tes-cta-flotante__titulo {
+    display: block;
+    font-size: 1.15rem;
+    line-height: 1.3;
+}
+
+.tes-cta-flotante__texto {
+    margin: .5rem 0 .85rem;
+    font-size: .9rem;
+    line-height: 1.4;
+}
+
+.tes-cta-flotante__boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Deja espacio para llegar al final de la página con la tarjeta flotando. */
+#testimonios,
+.tes-ficha {
+    padding-bottom: 12rem;
+}
+
+@media (max-width: 640px) {
+    .tes-cta-flotante {
+        right: .75rem;
+        bottom: .75rem;
+        width: min(17rem, calc(100vw - 1.5rem));
+        padding: .8rem 1rem;
+    }
+
+    .tes-cta-flotante__titulo { font-size: 1rem; }
+    .tes-cta-flotante__texto { display: none; }
+    .tes-cta-flotante__boton { margin-top: .65rem; }
+
+    #testimonios,
+    .tes-ficha {
+        padding-bottom: 9rem;
+    }
+}
