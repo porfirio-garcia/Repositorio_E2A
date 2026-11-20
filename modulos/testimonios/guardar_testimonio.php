@@ -55,7 +55,7 @@ if (!mb_check_encoding($datos, 'UTF-8')) {
 if ($datos['nombre'] === '' || mb_strlen($datos['nombre']) > 100) {
     tes_error_subida('Escribe un nombre de 1 a 100 caracteres.', $datos);
 }
-if (!in_array($datos['tipo_persona'], ['estudiante', 'egresado'], true)) {
+if (!in_array($datos['tipo_persona'], ['estudiante', 'egresado', 'familiar'], true)) {
     tes_error_subida('Selecciona un tipo de persona válido.', $datos);
 }
 if ($datos['tipo_persona'] !== 'familiar' && $carreraId === null) {
@@ -64,8 +64,12 @@ if ($datos['tipo_persona'] !== 'familiar' && $carreraId === null) {
 if ($datos['tipo_persona'] === 'familiar' && $datos['carrera_id'] === '') {
     $carreraId = null;
 }
-if (!in_array($datos['tipo_persona'], ['estudiante', 'egresado', 'familiar'], true)) {
-    tes_error_subida('Selecciona un tipo de persona válido.', $datos);
+$tiposPermitidos = ['estudiante', 'egresado', 'familiar'];
+if (!in_array($datos['tipo_persona'], $tiposPermitidos, true)) {
+tes_error_subida(
+    'PHP recibió el tipo de persona: ' . $datos['tipo_persona'],
+    $datos
+);
 }
 if ($longitud < 20 || $longitud > 3000) {
     tes_error_subida('Escribe un testimonio de 20 a 3000 caracteres.', $datos);

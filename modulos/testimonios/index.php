@@ -3,19 +3,26 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/obtener_testimonios.php';
 
-$opcionesEtiqueta = tes_etiquetas_publicas();
+$opcionesCarrera = carreras();
+
+$carreraId = filter_input(
+    INPUT_GET,
+    'carrera',
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1]]
+) ?: null;
 $etiqueta = filter_input(INPUT_GET, 'etiqueta', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: null;
 $tipo = $_GET['tipo'] ?? '';
 $tipos = ['estudiante' => 'Estudiantes', 'egresado' => 'Egresados', 'familiar' => 'Familiares'];
 $tipo = is_string($tipo) && isset($tipos[$tipo]) ? $tipo : null;
 $pagina = filter_input(INPUT_GET, 'pagina', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 1;
 
-$listado = tes_listar_publicados($etiqueta, $tipo, $pagina);
+$listado = tes_listar_publicados($carreraId, $tipo, $pagina);
 $testimonios = $listado['testimonios'];
 $pagina = $listado['pagina'];
 $paginas = $listado['paginas'];
 $etiquetas = tes_etiquetas_por_testimonio(array_column($testimonios, 'id'));
-$filtrosActivos = array_filter(['etiqueta' => $etiqueta, 'tipo' => $tipo]);
+$filtrosActivos = array_filter(['carrera' => $carreraId, 'tipo' => $tipo]);
 
 $enlacePagina = static fn (int $numero): string => '?' . http_build_query($filtrosActivos + ['pagina' => $numero]);
 
@@ -33,16 +40,23 @@ cabecera('Testimonios', '', 'css/listado.css');
 
     <form class="tes-filtros" method="get" action="index.php">
         <div class="campo">
-            <label class="campo__etiqueta" for="etiqueta">Etiqueta</label>
-            <select class="campo__control" id="etiqueta" name="etiqueta">
-                <option value="">Todas</option>
-                <?php foreach ($opcionesEtiqueta as $opcion): ?>
-                    <option value="<?= (int) $opcion['id'] ?>" <?= $etiqueta === (int) $opcion['id'] ? 'selected' : '' ?>>
-                        <?= e($opcion['nombre']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+    <label class="campo__etiqueta" for="carrera">
+        Carrera
+    </label>
+
+    <select class="campo__control" id="carrera" name="carrera">
+        <option value="">Todas las carreras</option>
+
+        <?php foreach ($opcionesCarrera as $carrera): ?>
+            <option
+                value="<?= (int) $carrera['id'] ?>"
+                <?= $carreraId === (int) $carrera['id'] ? 'selected' : '' ?>
+            >
+                <?= e($carrera['nombre']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
         <div class="campo">
             <label class="campo__etiqueta" for="tipo">Tipo de persona</label>
             <select class="campo__control" id="tipo" name="tipo">

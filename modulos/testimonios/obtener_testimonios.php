@@ -18,16 +18,15 @@ function tes_etiquetas_publicas(): array
     )->fetchAll();
 }
 
-function tes_listar_publicados(?int $etiqueta, ?string $tipo, int $pagina): array
+function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina): array
 {
     $condiciones = ["t.estado = 'aprobado'"];
     $valores = [];
 
-    if ($etiqueta !== null) {
-        $condiciones[] = 'EXISTS (
-            SELECT 1 FROM tes_testimonio_etiqueta te
-            WHERE te.testimonio_id = t.id AND te.etiqueta_id = ?
-        )';
+    if ($carreraId !== null) {
+    $condiciones[] = 't.carrera_id = ?';
+    $valores[] = $carreraId;
+}
         $valores[] = $etiqueta;
     }
 
