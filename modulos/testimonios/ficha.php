@@ -43,4 +43,5 @@ cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css');
     </article>
 </section>
 
+<?php require __DIR__ . '/includes/cta.php'; ?>
 <?php pie(); ?>
