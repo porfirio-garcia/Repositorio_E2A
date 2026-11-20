@@ -34,9 +34,9 @@ cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css');
         <?php if ($etiquetas): ?>
             <div class="tes-etiquetas">
                 <?php foreach ($etiquetas as $etiqueta): ?>
-                    <a class="insignia insignia--info" href="index.php?etiqueta=<?= (int) $etiqueta['id'] ?>">
+                    <span class="insignia insignia--info">
                         <?= e($etiqueta['nombre']) ?>
-                    </a>
+                    </span>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
