@@ -134,7 +134,7 @@ cabecera('Subir testimonio', '', 'css/modulo.css');
 
                 <small class="campo__ayuda">
                     Obligatoria para estudiantes y egresados.
-    Opcional para familiares.
+    Opcional para familiares.   
                 </small>
             </div>
 
