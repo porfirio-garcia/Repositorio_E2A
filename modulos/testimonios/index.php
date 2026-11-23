@@ -80,7 +80,9 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
             <?php foreach ($testimonios as $t): ?>
                 <article class="tarjeta tes-tarjeta">
                     <div class="tarjeta__cuerpo">
-                        <h2 class="tarjeta__titulo"><?= e($t['nombre']) ?></h2>
+                        <h2 class="tarjeta__titulo">
+                            <a href="ficha.php?id=<?= (int) $t['id'] ?>"><?= e($t['nombre']) ?></a>
+                        </h2>
                         <p class="leyenda">
                             <?= e(ucfirst($t['tipo_persona'])) ?>
 
@@ -93,9 +95,10 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
 <?php endif; ?>
                         </p>
                         <p><?= e($t['extracto']) ?><?= $t['tiene_mas'] ? '…' : '' ?></p>
-                        <?php if ($t['tiene_mas']): ?>
-                            <a href="ficha.php?id=<?= (int) $t['id'] ?>" aria-label="<?= e('Leer más del testimonio de ' . $t['nombre']) ?>">Leer más</a>
-                        <?php endif; ?>
+                        <a href="ficha.php?id=<?= (int) $t['id'] ?>"
+                           aria-label="<?= e(($t['tiene_mas'] ? 'Leer más del testimonio de ' : 'Ver testimonio de ') . $t['nombre']) ?>">
+                            <?= $t['tiene_mas'] ? 'Leer más' : 'Ver testimonio' ?>
+                        </a>
                     </div>
                     <?php if (isset($etiquetas[$t['id']])): ?>
                         <div class="tarjeta__pie tes-etiquetas">
