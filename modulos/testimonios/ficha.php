@@ -31,6 +31,15 @@ cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css?v=' . fi
 <?php endif; ?>
         </p>
         <p class="tes-texto-completo"><?= e($testimonio['testimonio']) ?></p>
+        <?php if ((int) $testimonio['video_publico'] === 1): ?>
+            <section class="tes-video-publico" aria-label="Video del testimonio">
+                <h2>Video del testimonio</h2>
+                <video controls playsinline preload="metadata" aria-label="<?= e('Video del testimonio de ' . $testimonio['nombre']) ?>">
+                    <source src="video_publico.php?id=<?= (int) $testimonio['id'] ?>">
+                    Tu navegador no admite la reproducción de este video.
+                </video>
+            </section>
+        <?php endif; ?>
         <?php if ($etiquetas): ?>
             <div class="tes-etiquetas">
                 <?php foreach ($etiquetas as $etiqueta): ?>
