@@ -11,7 +11,7 @@
 
 - Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. La generación y el video para revisión son opcionales.
 - Coordinación entra a `modulos/testimonios/admin/` para publicar o rechazar los envíos pendientes. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
-- El listado público muestra los testimonios publicados de nueve en nueve. Permite filtrar por carrera y tipo de persona; las etiquetas siguen visibles como información, sin actuar como filtros. Las tarjetas muestran hasta 100 caracteres y un enlace **Leer más** si tienen texto adicional. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación.
+- El listado público muestra los testimonios publicados de nueve en nueve. Permite filtrar por carrera y tipo de persona; las etiquetas siguen visibles como información, sin actuar como filtros. Las tarjetas muestran hasta 100 caracteres y un enlace **Leer más** si tienen texto adicional. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
 ## Tipos de persona
 
 El módulo permite registrar testimonios de:
@@ -25,3 +25,10 @@ pero opcional para familiares.
 
 Los testimonios enviados quedan pendientes de moderación.
 Solo los aprobados aparecen en el listado público.
+
+## Video público: migración y consentimiento
+
+- En instalaciones existentes, ejecutar una sola vez `modulos/testimonios/migracion_video_publico.sql` desde phpMyAdmin antes de usar el nuevo formulario o el reproductor.
+- El campo `video_publico` inicia en `0`: **los videos anteriores siguen siendo privados** hasta obtener el permiso de su autor. No habilitar videos antiguos sin autorización.
+- Al enviar un nuevo testimonio con video, el autor puede autorizar su publicación mediante una casilla independiente. Un video autorizado solo aparece en `ficha.php` cuando Coordinación publica el testimonio.
+- El reproductor utiliza `video_publico.php`, que verifica estado y autorización y entrega el archivo en modo de reproducción con soporte HTTP Range. La carpeta `video/` continúa bloqueada al acceso directo.
