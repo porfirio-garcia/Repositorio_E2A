@@ -64,7 +64,7 @@ function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina): arr
 function tes_obtener_publicado(int $id): ?array
 {
     $consulta = bd()->prepare(
-        "SELECT t.id, t.nombre, t.tipo_persona, t.generacion, t.testimonio, c.nombre AS carrera
+        "SELECT t.id, t.nombre, t.tipo_persona, t.generacion, t.testimonio, t.video_publico, c.nombre AS carrera
          FROM tes_testimonios t
          LEFT JOIN carreras c ON c.id = t.carrera_id
          WHERE t.id = ? AND t.estado = 'aprobado'"
