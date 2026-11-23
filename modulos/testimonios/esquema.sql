@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS tes_testimonios (
 
     -- Nombre del archivo generado por el servidor.
     video_archivo VARCHAR(255) NULL,
+    video_publico TINYINT(1) NOT NULL DEFAULT 0,
 
     estado ENUM('pendiente', 'aprobado', 'rechazado')
         NOT NULL DEFAULT 'pendiente',
