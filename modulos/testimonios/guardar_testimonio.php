@@ -131,8 +131,8 @@ try {
     $archivo = tes_guardar_video($_FILES['video'] ?? ['error' => UPLOAD_ERR_NO_FILE]);
     $consulta = bd()->prepare(
         "INSERT INTO tes_testimonios
-         (nombre, tipo_persona, carrera_id, generacion, testimonio, video_archivo, estado)
-         VALUES (?, ?, ?, ?, ?, ?, 'pendiente')"
+         (nombre, tipo_persona, carrera_id, generacion, testimonio, video_archivo, video_publico, estado)
+         VALUES (?, ?, ?, ?, ?, ?, ?, 'pendiente')"
     );
     $consulta->execute([
         $datos['nombre'],
@@ -141,6 +141,7 @@ try {
         $datos['generacion'] !== '' ? $datos['generacion'] : null,
         $datos['testimonio'],
         $archivo,
+        $archivo !== null && ($_POST['consentimiento_video'] ?? null) === '1' ? 1 : 0,
     ]);
 } catch (InvalidArgumentException $error) {
     tes_error_subida($error->getMessage(), $datos);
