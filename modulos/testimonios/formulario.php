@@ -170,7 +170,7 @@ cabecera('Subir testimonio', '', 'css/modulo.css');
         <!-- VIDEO -->
         <div class="campo">
             <label class="campo__etiqueta" for="video">
-                Video para revisión (opcional)
+                Video (opcional; puede publicarse con tu autorización)
             </label>
 
             <input
@@ -184,6 +184,18 @@ cabecera('Subir testimonio', '', 'css/modulo.css');
             <small class="campo__ayuda">
                 Formatos permitidos: MP4 y WebM.
                 Tamaño máximo: 35 MB.
+            </small>
+        </div>
+
+        <!-- AUTORIZACIÓN ESPECÍFICA DEL VIDEO -->
+        <div class="campo">
+            <label>
+                <input type="checkbox" name="consentimiento_video" value="1">
+                Si adjunto un video, autorizo que se publique junto con mi testimonio
+                escrito cuando Coordinación lo apruebe.
+            </label>
+            <small class="campo__ayuda">
+                Sin esta autorización, el video estará disponible solo para Coordinación.
             </small>
         </div>
 
