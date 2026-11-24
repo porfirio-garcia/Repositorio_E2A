@@ -189,6 +189,23 @@ a.tes-tarjeta:focus-visible {
     outline-offset: 2px;
 }
 
+/* En escritorio: exactamente tres columnas por fila (30 testimonios = 10 filas). */
+@media (min-width: 950px) {
+    #testimonios .rejilla {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+@media (min-width: 620px) and (max-width: 949px) {
+    #testimonios .rejilla {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 619px) {
+    #testimonios .rejilla {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
 /* Cada tarjeta termina donde finaliza su extracto, sin altura fija. */
 #testimonios .rejilla {
     align-items: start;
