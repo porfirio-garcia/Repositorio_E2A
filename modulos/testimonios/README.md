@@ -8,9 +8,9 @@
 
 ## Flujo
 
-- Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. La generación y el video para revisión son opcionales.
+- Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. El periodo se elige con selectores de año según el tipo de persona y el video es opcional.
 - Coordinación entra a `modulos/testimonios/admin/` para publicar o rechazar los envíos pendientes. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
-- El listado público muestra los testimonios publicados de treinta en treinta. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran las primeras **100 palabras separadas por espacios** sin recorte por número de líneas. Cada tarjeta adapta su altura al texto visible. El enlace visual **Ver más** solo aparece cuando hay palabras adicionales después de las primeras 100; toda la tarjeta sigue siendo clicable, incluso si el texto es corto. El testimonio completo se conserva en la ficha. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
+- El listado público muestra los testimonios publicados de treinta en treinta. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran hasta **40 palabras** y **5 líneas**, con altura uniforme. El indicador **Ver más** aparece cuando el texto se recorta por palabras o líneas; toda la tarjeta sigue siendo clicable, incluso si el texto es corto. El testimonio completo se conserva en la ficha. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
 ## Tipos de persona
 
 El módulo permite registrar testimonios de:
@@ -46,7 +46,7 @@ Solo los aprobados aparecen en el listado público.
 
 ## Listado y paginación
 
-- Se muestran 30 testimonios aprobados por página, distribuidos en 3 columnas y hasta 10 filas en pantallas de escritorio (2 columnas en tabletas, 1 en celulares), en tarjetas de altura automática según el extracto de hasta 100 palabras; el texto completo se mantiene en la ficha.
+- Se muestran 30 testimonios aprobados por página, distribuidos en 3 columnas y hasta 10 filas en pantallas de escritorio (2 columnas en tabletas, 1 en celulares), en tarjetas uniformes con extractos de hasta 40 palabras y cinco líneas; el texto completo se mantiene en la ficha.
 - Se eliminó el relleno extra del listado y se evita que las páginas con pocos resultados dejen un hueco grande antes del pie.
 - La navegación usa números de página, Anterior y Siguiente y conserva los filtros activos.
 - Los enlaces de regreso en el formulario, la ficha y las vistas administrativas usan botones del estilo común de la plataforma.
@@ -54,9 +54,18 @@ Solo los aprobados aparecen en el listado público.
 ## Límites de texto
 
 - El formulario acepta de 20 a 3000 **caracteres** por testimonio; no hay un límite de 100 palabras al enviar.
-- En el listado se muestran hasta 100 **palabras** de cada testimonio, con `Ver más` si quedan palabras adicionales. La ficha conserva y muestra el testimonio completo.
+- En el listado se muestran hasta 40 **palabras** y 5 líneas de cada testimonio, con `Ver más` si queda texto adicional. La ficha conserva y muestra el testimonio completo.
 - La paginación pública no cambia la bandeja de moderación.
 
 ## Limpieza del módulo
 
 Los archivos SQL de datos ficticios usados durante el desarrollo ya no forman parte del repositorio. Los testimonios cargados previamente en MySQL no se borran al eliminar esos scripts: se gestionan desde la bandeja de Coordinación o desde una base de desarrollo. Se conservan `esquema.sql` y `migracion_video_publico.sql` para la instalación y actualización del módulo.
+
+## Años de ingreso y egreso
+
+- El formulario ya no permite escribir manualmente la generación; ofrece selectores de años desde 1990 hasta el año actual.
+- Estudiantes: año de ingreso obligatorio; egreso oculto.
+- Egresados: ingreso y egreso obligatorios; egreso no puede ser anterior al ingreso.
+- Familiares: ingreso y egreso del estudiante son opcionales; pueden omitirse ambos.
+- La validación se aplica tanto en JavaScript como en PHP. Se mantienen los datos ingresados cuando el formulario retorna por un error.
+- Los valores se guardan en la columna existente `generacion` (por ejemplo `2023`, `2023-2026`, o `Egreso 2026`); los testimonios anteriores no se alteran y no es necesaria una migración.
