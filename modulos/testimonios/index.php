@@ -108,8 +108,8 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
     · <?= e($t['carrera']) ?>
 <?php endif; ?>
 
-<?php if (!empty($t['generacion'])): ?>
-    · <?= e($t['generacion']) ?>
+<?php if (!empty($t['creado_en'])): ?>
+    · Publicado el <?= e((new DateTimeImmutable($t['creado_en']))->format('d/m/Y')) ?>
 <?php endif; ?>
                         </p>
                         <p class="tes-tarjeta__extracto"><?= e($resumen['texto']) ?><?= $resumen['recortado'] ? '…' : '' ?></p>
