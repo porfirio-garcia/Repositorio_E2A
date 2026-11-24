@@ -4,7 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../nucleo/comun.php';
 require_once __DIR__ . '/includes/etiquetas.php';
 
-const TES_POR_PAGINA = 9;
+const TES_POR_PAGINA = 10;
 
 function tes_etiquetas_publicas(): array
 {
