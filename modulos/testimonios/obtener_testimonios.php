@@ -18,7 +18,7 @@ function tes_etiquetas_publicas(): array
     )->fetchAll();
 }
 
-function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina): array
+function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina, ?int $etiquetaId = null): array
 {
     $condiciones = ["t.estado = 'aprobado'"];
     $valores = [];
@@ -31,6 +31,14 @@ function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina): arr
     if ($tipo !== null) {
         $condiciones[] = 't.tipo_persona = ?';
         $valores[] = $tipo;
+    }
+
+    if ($etiquetaId !== null) {
+        $condiciones[] = 'EXISTS (
+            SELECT 1 FROM tes_testimonio_etiqueta te
+            WHERE te.testimonio_id = t.id AND te.etiqueta_id = ?
+        )';
+        $valores[] = $etiquetaId;
     }
 
     $donde = implode(' AND ', $condiciones);
