@@ -180,3 +180,104 @@ a.tes-tarjeta:focus-visible {
     outline: 3px solid var(--marca-700);
     outline-offset: 2px;
 }
+
+/* Tarjetas uniformes en el listado. El detalle conserva el texto completo. */
+.tes-tarjeta {
+    height: 20.5rem;
+    min-height: 20.5rem;
+    max-height: 20.5rem;
+}
+.tes-tarjeta .tarjeta__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    min-height: 0;
+    overflow: hidden;
+}
+.tes-tarjeta .tarjeta__titulo,
+.tes-tarjeta__metadatos,
+.tes-tarjeta__extracto {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.tes-tarjeta .tarjeta__titulo {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    flex-shrink: 0;
+}
+.tes-tarjeta__metadatos {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    flex-shrink: 0;
+}
+.tes-tarjeta__extracto {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+}
+.tes-tarjeta .tes-tarjeta__accion {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+.tes-tarjeta .tarjeta__pie {
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    max-height: 4.5rem;
+    overflow: hidden;
+}
+
+/* Navegación numerada: anterior, página activa y siguiente. */
+.tes-paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-block: 2rem 1rem;
+}
+.tes-paginacion__numeros {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+.tes-paginacion__control,
+.tes-paginacion__numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: .55rem .75rem;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-md);
+    background: var(--blanco);
+    color: var(--marca-700);
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1;
+}
+.tes-paginacion__control { gap: .4rem; }
+a.tes-paginacion__numero:hover,
+a.tes-paginacion__control:hover {
+    background: var(--marca-100);
+    border-color: var(--marca-700);
+}
+.tes-paginacion__numero--actual {
+    background: var(--marca-700);
+    color: var(--blanco);
+    border-color: var(--marca-700);
+}
+.tes-paginacion__control--desactivado {
+    opacity: .4;
+    cursor: not-allowed;
+}
+.tes-paginacion__total {
+    flex-basis: 100%;
+    text-align: center;
+    color: var(--texto-suave);
+}
+.tes-paginacion a:focus-visible {
+    outline: 3px solid var(--marca-700);
+    outline-offset: 2px;
+}
