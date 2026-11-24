@@ -12,25 +12,51 @@ $carreraId = filter_input(
     FILTER_VALIDATE_INT,
     ['options' => ['min_range' => 1]]
 ) ?: null;
-$etiquetaId = filter_input(
-    INPUT_GET,
-    'etiqueta',
-    FILTER_VALIDATE_INT,
-    ['options' => ['min_range' => 1]]
-) ?: null;
+// Aceptar selección múltiple y el enlace legado ?etiqueta=ID.
+$etiquetasRecibidas = $_GET['etiquetas'] ?? [];
+if (!is_array($etiquetasRecibidas)) {
+    $etiquetasRecibidas = [];
+}
+$etiquetaAnterior = $_GET['etiqueta'] ?? null;
+if (is_string($etiquetaAnterior) && $etiquetaAnterior !== '') {
+    $etiquetasRecibidas[] = $etiquetaAnterior;
+}
+$etiquetasValidas = array_column($opcionesEtiqueta, 'id');
+$etiquetasIds = [];
+foreach (array_slice($etiquetasRecibidas, 0, 100) as $etiqueta) {
+    if (!is_string($etiqueta) || !ctype_digit($etiqueta)) {
+        continue;
+    }
+    $idEtiqueta = (int) $etiqueta;
+    if (in_array($idEtiqueta, array_map('intval', $etiquetasValidas), true)) {
+        $etiquetasIds[$idEtiqueta] = $idEtiqueta;
+    }
+}
+$etiquetasIds = array_values($etiquetasIds);
 $tipo = $_GET['tipo'] ?? '';
 $tipos = ['estudiante' => 'Estudiantes', 'egresado' => 'Egresados', 'familiar' => 'Familiares'];
 $tipo = is_string($tipo) && isset($tipos[$tipo]) ? $tipo : null;
 $pagina = filter_input(INPUT_GET, 'pagina', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 1;
 
-$listado = tes_listar_publicados($carreraId, $tipo, $pagina, $etiquetaId);
+$listado = tes_listar_publicados($carreraId, $tipo, $pagina, $etiquetasIds);
 $testimonios = $listado['testimonios'];
 $pagina = $listado['pagina'];
 $paginas = $listado['paginas'];
 $etiquetas = tes_etiquetas_por_testimonio(array_column($testimonios, 'id'));
-$filtrosActivos = array_filter(['carrera' => $carreraId, 'tipo' => $tipo, 'etiqueta' => $etiquetaId]);
+$filtrosActivos = array_filter(['carrera' => $carreraId, 'tipo' => $tipo]);
+if ($etiquetasIds) {
+    $filtrosActivos['etiquetas'] = $etiquetasIds;
+}
+$hayFiltros = $carreraId !== null || $tipo !== null || (bool) $etiquetasIds;
 
 $enlacePagina = static fn (int $numero): string => '?' . http_build_query($filtrosActivos + ['pagina' => $numero]);
+
+// El mismo HTML se reutiliza para actualizaciones parciales sin recargar la página.
+if (($_GET['tes_fragmento'] ?? null) === '1') {
+    header('Content-Type: text/html; charset=utf-8');
+    require __DIR__ . '/includes/listado_publico.php';
+    exit;
+}
 
 cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/listado.css'));
 ?>
@@ -44,7 +70,7 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
         
     </header>
 
-    <form class="tes-filtros" method="get" action="index.php">
+    <form class="tes-filtros" id="tes-filtros" method="get" action="index.php">
         <div class="campo">
     <label class="campo__etiqueta" for="carrera">
         Carrera
@@ -72,103 +98,39 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
                 <?php endforeach; ?>
             </select>
         </div>
-        <div class="campo">
-            <label class="campo__etiqueta" for="etiqueta">Etiqueta</label>
-            <select class="campo__control" id="etiqueta" name="etiqueta">
-                <option value="">Todas las etiquetas</option>
-                <?php foreach ($opcionesEtiqueta as $tag): ?>
-                    <option value="<?= (int) $tag['id'] ?>"
-                        <?= $etiquetaId === (int) $tag['id'] ? 'selected' : '' ?>>
-                        <?= e($tag['nombre']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <button class="boton boton--secundario" type="submit">Filtrar</button>
-        <?php if ($filtrosActivos): ?>
-            <a class="tes-limpiar-filtros" href="index.php" aria-label="Limpiar filtros" title="Limpiar filtros"><span aria-hidden="true">&times;</span></a>
-        <?php endif; ?>
+        <fieldset class="tes-filtro-etiquetas">
+            <legend class="campo__etiqueta">Etiquetas</legend>
+            <details class="tes-filtro-etiquetas__desplegable" id="tes-filtro-desplegable">
+                <summary>
+                    <span>Seleccionar etiquetas</span>
+                    <span class="tes-filtro-etiquetas__contador"><?= count($etiquetasIds) ?> seleccionadas</span>
+                </summary>
+                <div class="tes-filtro-etiquetas__panel">
+                    <?php foreach ($opcionesEtiqueta as $tag): ?>
+                        <label class="tes-filtro-etiquetas__opcion">
+                            <input type="checkbox" name="etiquetas[]" value="<?= (int) $tag['id'] ?>"
+                                <?= in_array((int) $tag['id'], $etiquetasIds, true) ? 'checked' : '' ?>>
+                            <?= e($tag['nombre']) ?>
+                        </label>
+                    <?php endforeach; ?>
+                    <?php if (!$opcionesEtiqueta): ?>
+                        <p>No hay etiquetas disponibles.</p>
+                    <?php endif; ?>
+                </div>
+            </details>
+        </fieldset>
+        <button class="tes-limpiar-filtros" type="button" id="tes-limpiar-etiquetas"
+                aria-label="Limpiar únicamente etiquetas" title="Limpiar etiquetas"
+                <?= $etiquetasIds ? '' : 'hidden' ?>>&times;</button>
+        <noscript><button class="boton boton--secundario" type="submit">Aplicar filtros</button></noscript>
     </form>
 
-    <?php if (!$testimonios): ?>
-        <div class="vacio">
-            <h2><?= $filtrosActivos ? 'No hay testimonios con estos filtros' : 'Todavía no hay testimonios publicados' ?></h2>
-        </div>
-    <?php else: ?>
-        <div class="rejilla">
-            <?php foreach ($testimonios as $t): ?>
-                <?php $resumen = tes_resumir_testimonio($t['extracto'], 40); ?>
-                <a class="tarjeta tes-tarjeta" href="ficha.php?id=<?= (int) $t['id'] ?>" aria-label="<?= e('Ver testimonio de ' . $t['nombre']) ?>">
-                    <div class="tarjeta__cuerpo">
-                        <h2 class="tarjeta__titulo"><?= e($t['nombre']) ?></h2>
-                        <p class="leyenda tes-tarjeta__metadatos">
-                            <?= e(ucfirst($t['tipo_persona'])) ?>
-
-<?php if (!empty($t['carrera'])): ?>
-    · <?= e($t['carrera']) ?>
-<?php endif; ?>
-
-<?php if (!empty($t['creado_en'])): ?>
-    · Creado el <?= e((new DateTimeImmutable($t['creado_en']))->format('d/m/Y')) ?>
-<?php endif; ?>
-                        </p>
-                        <p class="tes-tarjeta__extracto"><?= e($resumen['texto']) ?><?= $resumen['recortado'] ? '…' : '' ?></p>
-                        <span class="tes-tarjeta__accion"
-                              data-recortado-palabras="<?= $resumen['recortado'] ? '1' : '0' ?>"
-                              <?= $resumen['recortado'] ? '' : 'hidden' ?>>
-                            Ver más <span aria-hidden="true">→</span>
-                        </span>
-                    </div>
-                    <?php if (isset($etiquetas[$t['id']])): ?>
-                        <div class="tarjeta__pie tes-etiquetas">
-                            <?php foreach ($etiquetas[$t['id']] as $tag): ?>
-                                <span class="insignia insignia--info"><?= e($tag['nombre']) ?></span>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
-
-        <?php if ($paginas > 1): ?>
-            <nav class="tes-paginacion" aria-label="Páginas de testimonios">
-                <?php if ($pagina > 1): ?>
-                    <a class="tes-paginacion__control" href="<?= e($enlacePagina($pagina - 1)) ?>" rel="prev">
-                        <span aria-hidden="true">←</span> Anterior
-                    </a>
-                <?php else: ?>
-                    <span class="tes-paginacion__control tes-paginacion__control--desactivado" aria-disabled="true">← Anterior</span>
-                <?php endif; ?>
-
-                <div class="tes-paginacion__numeros">
-                    <?php
-                    $primeraVisible = max(1, min($pagina - 2, $paginas - 4));
-                    $ultimaVisible = min($paginas, $primeraVisible + 4);
-                    ?>
-                    <?php for ($numero = $primeraVisible; $numero <= $ultimaVisible; $numero++): ?>
-                        <?php if ($numero === $pagina): ?>
-                            <span class="tes-paginacion__numero tes-paginacion__numero--actual" aria-current="page"><?= $numero ?></span>
-                        <?php else: ?>
-                            <a class="tes-paginacion__numero"
-                               href="<?= e($enlacePagina($numero)) ?>"
-                               aria-label="Ir a la página <?= $numero ?>"><?= $numero ?></a>
-                        <?php endif; ?>
-                    <?php endfor; ?>
-                </div>
-
-                <?php if ($pagina < $paginas): ?>
-                    <a class="tes-paginacion__control" href="<?= e($enlacePagina($pagina + 1)) ?>" rel="next">
-                        Siguiente <span aria-hidden="true">→</span>
-                    </a>
-                <?php else: ?>
-                    <span class="tes-paginacion__control tes-paginacion__control--desactivado" aria-disabled="true">Siguiente →</span>
-                <?php endif; ?>
-                <small class="tes-paginacion__total">Página <?= $pagina ?> de <?= $paginas ?></small>
-            </nav>
-        <?php endif; ?>
-    <?php endif; ?>
+    <div id="tes-resultados" aria-live="polite" aria-busy="false">
+        <?php require __DIR__ . '/includes/listado_publico.php'; ?>
+    </div>
 </section>
 
 <script src="assets/js/tarjetas.js?v=<?= filemtime(__DIR__ . '/assets/js/tarjetas.js') ?>" defer></script>
+<script src="assets/js/filtros.js?v=<?= filemtime(__DIR__ . '/assets/js/filtros.js') ?>" defer></script>
 <?php require __DIR__ . '/includes/cta.php'; ?>
 <?php pie(); ?>
