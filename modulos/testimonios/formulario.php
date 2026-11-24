@@ -10,12 +10,14 @@ require_once __DIR__ . '/../../nucleo/comun.php';
 
 // Obtener carreras desde el núcleo.
 $listaCarreras = carreras();
+require_once __DIR__ . '/includes/etiquetas.php';
+$listaEtiquetas = tes_etiquetas_disponibles();
 
 // Recuperar datos anteriores si hubo un error.
 $datosFormulario = $_SESSION['tes_formulario'] ?? [];
 unset($_SESSION['tes_formulario']);
 
-cabecera('Subir testimonio', '', 'css/modulo.css');
+cabecera('Subir testimonio', '', 'css/modulo.css?v=' . filemtime(__DIR__ . '/css/modulo.css'));
 ?>
 
 <section class="contenedor seccion">
@@ -125,6 +127,26 @@ cabecera('Subir testimonio', '', 'css/modulo.css');
                 Opcional para familiares.
             </small>
         </div>
+
+        <!-- ETIQUETAS DEFINIDAS POR COORDINACIÓN -->
+        <fieldset class="campo tes-campo-etiquetas">
+            <legend class="campo__etiqueta">Etiquetas (opcional)</legend>
+            <p class="campo__ayuda">Selecciona los temas que describen tu experiencia.</p>
+            <?php if (!$listaEtiquetas): ?>
+                <p class="campo__ayuda">Todavía no hay etiquetas disponibles.</p>
+            <?php else: ?>
+                <div class="tes-opciones-etiquetas">
+                    <?php foreach ($listaEtiquetas as $tag): ?>
+                        <label class="tes-opcion-etiqueta-publica">
+                            <input type="checkbox" name="etiquetas[]"
+                                   value="<?= (int) $tag['id'] ?>"
+                                   <?= in_array((int) $tag['id'], $datosFormulario['etiquetas'] ?? [], true) ? 'checked' : '' ?>>
+                            <span><?= e($tag['nombre']) ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </fieldset>
 
         <!-- GENERACIÓN -->
         <div class="campo">
