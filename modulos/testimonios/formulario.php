@@ -259,6 +259,6 @@ cabecera('Subir testimonio', '', 'css/modulo.css?v=' . filemtime(__DIR__ . '/css
 
 </section>
 
-<script src="assets/js/tes.js" defer></script>
+<script src="assets/js/tes.js?v=<?= filemtime(__DIR__ . '/assets/js/tes.js') ?>" defer></script>
 
 <?php pie(); ?>
