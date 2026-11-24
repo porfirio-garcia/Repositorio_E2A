@@ -8,7 +8,7 @@
 
 ## Instalación para pruebas
 
-En una base de prueba limpia, importa `sql/01-nucleo.sql` y luego `modulos/testimonios/esquema.sql`. Si quieres ejemplos, importa también `modulos/testimonios/datos_prueba.sql`. Crea las cuentas de prueba del núcleo y entra como Coordinación. Si ya tienes la tabla provisional de la primera versión, usa una base de prueba separada: importar el esquema encima no cambia las columnas de una tabla que ya existe.
+En una base de prueba limpia, importa `sql/01-nucleo.sql` y luego `modulos/testimonios/esquema.sql`. Genera los ejemplos desde el formulario y modéralos desde Coordinación; los archivos de carga masiva ficticia se retiraron del repositorio. Si ya tienes instalada una versión anterior, revisa las migraciones y realiza un respaldo antes de modificar las tablas.
 
 ## Cómo funciona
 
