@@ -73,14 +73,18 @@
     border-top: 1px solid #d8deeb;
 }
 .tes-opciones-etiquetas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
     gap: .65rem;
 }
 .tes-opcion-etiqueta-publica {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    flex: 0 1 auto;
     gap: .55rem;
+    width: max-content;
+    max-width: 100%;
     min-width: 0;
     padding: .65rem .8rem;
     border: 1px solid #c7d2e3;
