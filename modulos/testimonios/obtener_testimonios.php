@@ -6,6 +6,25 @@ require_once __DIR__ . '/includes/etiquetas.php';
 
 const TES_POR_PAGINA = 10;
 
+/**
+ * Limita el extracto a 100 palabras separadas por espacios.
+ * El recorte adicional por número de líneas se realiza en el navegador.
+ * El texto íntegro permanece en la ficha del testimonio.
+ */
+function tes_resumir_testimonio(string $texto, int $limitePalabras = 100): array
+{
+    $palabras = preg_split('/\\s+/u', trim($texto), $limitePalabras + 1, PREG_SPLIT_NO_EMPTY);
+    if ($palabras === false || $palabras === []) {
+        return ['texto' => '', 'recortado' => false];
+    }
+
+    $recortado = count($palabras) > $limitePalabras;
+    return [
+        'texto' => implode(' ', array_slice($palabras, 0, $limitePalabras)),
+        'recortado' => $recortado,
+    ];
+}
+
 function tes_etiquetas_publicas(): array
 {
     return bd()->query(
