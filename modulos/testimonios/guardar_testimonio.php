@@ -28,7 +28,7 @@ if (!is_string($_POST['token'] ?? null)) {
 verificar_token();
 
 $datos = [];
-foreach (['nombre', 'tipo_persona', 'carrera_id', 'generacion', 'testimonio'] as $campo) {
+foreach (['nombre', 'tipo_persona', 'carrera_id', 'anio_ingreso', 'anio_egreso', 'testimonio'] as $campo) {
     $valor = $_POST[$campo] ?? null;
     $datos[$campo] = is_string($valor) ? trim($valor) : '';
 }
@@ -39,7 +39,8 @@ function tes_error_subida(string $aviso, array $datos): never
         'nombre' => mb_substr($datos['nombre'], 0, 100),
         'tipo_persona' => mb_substr($datos['tipo_persona'], 0, 10),
         'carrera_id' => mb_substr($datos['carrera_id'], 0, 10),
-        'generacion' => mb_substr($datos['generacion'], 0, 20),
+        'anio_ingreso' => mb_substr($datos['anio_ingreso'], 0, 4),
+        'anio_egreso' => mb_substr($datos['anio_egreso'], 0, 4),
         'testimonio' => mb_substr($datos['testimonio'], 0, 3000),
         'etiquetas' => $datos['etiquetas'] ?? [],
     ];
@@ -73,6 +74,52 @@ if ($etiquetasIds) {
 
 $carreraId = entero($datos['carrera_id']);
 $longitud = mb_strlen($datos['testimonio']);
+
+$anioActual = (int) date('Y');
+$validarAnio = static function (string $valor) use ($anioActual): ?int {
+    if ($valor === '' || !preg_match('/\\A\\d{4}\\z/D', $valor)) {
+        return null;
+    }
+    $anio = (int) $valor;
+    return $anio >= 1990 && $anio <= $anioActual ? $anio : null;
+};
+$ingreso = $validarAnio($datos['anio_ingreso']);
+$egreso = $validarAnio($datos['anio_egreso']);
+$tipoPersona = $datos['tipo_persona'];
+
+if ($datos['anio_ingreso'] !== '' && $ingreso === null) {
+    tes_error_subida('Selecciona un año de ingreso válido.', $datos);
+}
+if ($tipoPersona === 'estudiante') {
+    if ($ingreso === null) {
+        tes_error_subida('El año de ingreso es obligatorio para estudiantes.', $datos);
+    }
+    // Los estudiantes no presentan año de egreso.
+    $egreso = null;
+} else {
+    if ($datos['anio_egreso'] !== '' && $egreso === null) {
+        tes_error_subida('Selecciona un año de egreso válido.', $datos);
+    }
+    if ($tipoPersona === 'egresado' && ($ingreso === null || $egreso === null)) {
+        tes_error_subida('Selecciona los años de ingreso y egreso.', $datos);
+    }
+}
+if ($ingreso !== null && $egreso !== null && $egreso < $ingreso) {
+    tes_error_subida('El año de egreso no puede ser anterior al de ingreso.', $datos);
+}
+
+// Se conserva el campo generacion para no alterar la base de datos ni los testimonios anteriores.
+if ($ingreso !== null && $egreso !== null) {
+    $generacion = $ingreso . '-' . $egreso;
+} elseif ($ingreso !== null) {
+    $generacion = (string) $ingreso;
+} elseif ($egreso !== null) {
+    $generacion = 'Egreso ' . $egreso;
+} else {
+    $generacion = null;
+}
+
+
 
 if (!mb_check_encoding($datos, 'UTF-8')) {
     tes_error_subida('El texto del envío contiene caracteres no válidos.', $datos);
@@ -158,7 +205,7 @@ try {
         $datos['nombre'],
         $datos['tipo_persona'],
         $carreraId,
-        $datos['generacion'] !== '' ? $datos['generacion'] : null,
+        $generacion,
         $datos['testimonio'],
         $archivo,
         $archivo !== null && ($_POST['consentimiento_video'] ?? null) === '1' ? 1 : 0,
