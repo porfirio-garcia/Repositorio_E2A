@@ -100,7 +100,7 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
                 <a class="tarjeta tes-tarjeta" href="ficha.php?id=<?= (int) $t['id'] ?>" aria-label="<?= e('Ver testimonio de ' . $t['nombre']) ?>">
                     <div class="tarjeta__cuerpo">
                         <h2 class="tarjeta__titulo"><?= e($t['nombre']) ?></h2>
-                        <p class="leyenda">
+                        <p class="leyenda tes-tarjeta__metadatos">
                             <?= e(ucfirst($t['tipo_persona'])) ?>
 
 <?php if (!empty($t['carrera'])): ?>
@@ -111,7 +111,7 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
     · <?= e($t['generacion']) ?>
 <?php endif; ?>
                         </p>
-                        <p><?= e($t['extracto']) ?><?= $t['tiene_mas'] ? '…' : '' ?></p>
+                        <p class="tes-tarjeta__extracto"><?= e($t['extracto']) ?><?= $t['tiene_mas'] ? '…' : '' ?></p>
                         <span class="tes-tarjeta__accion"><?= $t['tiene_mas'] ? 'Leer más' : 'Ver testimonio' ?> <span aria-hidden="true">→</span></span>
                     </div>
                     <?php if (isset($etiquetas[$t['id']])): ?>
@@ -126,16 +126,39 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
         </div>
 
         <?php if ($paginas > 1): ?>
-            <nav aria-label="Páginas de testimonios">
-                <ul class="paginacion">
-                    <?php if ($pagina > 1): ?>
-                        <li><a href="<?= e($enlacePagina($pagina - 1)) ?>" rel="prev">Anterior</a></li>
-                    <?php endif; ?>
-                    <li><span aria-current="page">Página <?= $pagina ?> de <?= $paginas ?></span></li>
-                    <?php if ($pagina < $paginas): ?>
-                        <li><a href="<?= e($enlacePagina($pagina + 1)) ?>" rel="next">Siguiente</a></li>
-                    <?php endif; ?>
-                </ul>
+            <nav class="tes-paginacion" aria-label="Páginas de testimonios">
+                <?php if ($pagina > 1): ?>
+                    <a class="tes-paginacion__control" href="<?= e($enlacePagina($pagina - 1)) ?>" rel="prev">
+                        <span aria-hidden="true">←</span> Anterior
+                    </a>
+                <?php else: ?>
+                    <span class="tes-paginacion__control tes-paginacion__control--desactivado" aria-disabled="true">← Anterior</span>
+                <?php endif; ?>
+
+                <div class="tes-paginacion__numeros">
+                    <?php
+                    $primeraVisible = max(1, min($pagina - 2, $paginas - 4));
+                    $ultimaVisible = min($paginas, $primeraVisible + 4);
+                    ?>
+                    <?php for ($numero = $primeraVisible; $numero <= $ultimaVisible; $numero++): ?>
+                        <?php if ($numero === $pagina): ?>
+                            <span class="tes-paginacion__numero tes-paginacion__numero--actual" aria-current="page"><?= $numero ?></span>
+                        <?php else: ?>
+                            <a class="tes-paginacion__numero"
+                               href="<?= e($enlacePagina($numero)) ?>"
+                               aria-label="Ir a la página <?= $numero ?>"><?= $numero ?></a>
+                        <?php endif; ?>
+                    <?php endfor; ?>
+                </div>
+
+                <?php if ($pagina < $paginas): ?>
+                    <a class="tes-paginacion__control" href="<?= e($enlacePagina($pagina + 1)) ?>" rel="next">
+                        Siguiente <span aria-hidden="true">→</span>
+                    </a>
+                <?php else: ?>
+                    <span class="tes-paginacion__control tes-paginacion__control--desactivado" aria-disabled="true">Siguiente →</span>
+                <?php endif; ?>
+                <small class="tes-paginacion__total">Página <?= $pagina ?> de <?= $paginas ?></small>
             </nav>
         <?php endif; ?>
     <?php endif; ?>
