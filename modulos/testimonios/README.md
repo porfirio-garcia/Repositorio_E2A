@@ -4,8 +4,7 @@
 
 1. Configura el núcleo según el README de la raíz e importa `sql/01-nucleo.sql` si es una instalación nueva.
 2. Ejecuta `modulos/testimonios/esquema.sql`. Si ya tienes el módulo instalado, puedes volver a ejecutar este archivo para incorporar las tablas de etiquetas. Conserva los testimonios y el historial existentes.
-3. Para probar con ejemplos en una base local, importa `modulos/testimonios/datos_prueba.sql` una sola vez.
-4. Si vas a recibir videos, comprueba que PHP pueda escribir en `modulos/testimonios/video/`. En XAMPP, Apache debe aplicar el `.htaccess` de esta carpeta. Si usas otro servidor, configura el bloqueo de acceso HTTP directo a la carpeta. Para aceptar archivos de 35 MB, configura `upload_max_filesize = 35M` y `post_max_size = 40M` o superiores en `php.ini`.
+3. Si vas a recibir videos, comprueba que PHP pueda escribir en `modulos/testimonios/video/`. En XAMPP, Apache debe aplicar el `.htaccess` de esta carpeta. Si usas otro servidor, configura el bloqueo de acceso HTTP directo a la carpeta. Para aceptar archivos de 35 MB, configura `upload_max_filesize = 35M` y `post_max_size = 40M` o superiores en `php.ini`.
 
 ## Flujo
 
@@ -45,18 +44,19 @@ Solo los aprobados aparecen en el listado público.
 
 - Para eliminar los filtros activos, el listado muestra una X junto a **Filtrar**, con descripción accesible «Limpiar filtros».
 
-## Listado y pruebas de paginación
+## Listado y paginación
 
 - Se muestran 30 testimonios aprobados por página, distribuidos en 3 columnas y hasta 10 filas en pantallas de escritorio (2 columnas en tabletas, 1 en celulares), en tarjetas de altura automática según el extracto de hasta 100 palabras; el texto completo se mantiene en la ficha.
 - Se eliminó el relleno extra del listado y se evita que las páginas con pocos resultados dejen un hueco grande antes del pie.
 - La navegación usa números de página, Anterior y Siguiente y conserva los filtros activos.
 - Los enlaces de regreso en el formulario, la ficha y las vistas administrativas usan botones del estilo común de la plataforma.
-- Para probar dos páginas de ejemplo incluso con una base vacía, importa desde phpMyAdmin `modulos/testimonios/datos_prueba_paginacion_40.sql` en una base **local de desarrollo**. Añade 40 testimonios ficticios y aprobados, algunos de más de 100 palabras, sin modificar los registros existentes. Reejecutarlo no duplica los mismos ejemplos por nombre.
-- No importar los registros ficticios a un entorno público real: están publicados solo para probar la paginación.
 
 ## Límites de texto
 
 - El formulario acepta de 20 a 3000 **caracteres** por testimonio; no hay un límite de 100 palabras al enviar.
 - En el listado se muestran hasta 100 **palabras** de cada testimonio, con `Ver más` si quedan palabras adicionales. La ficha conserva y muestra el testimonio completo.
 - La paginación pública no cambia la bandeja de moderación.
-- El antiguo script `assets/js/listado.js` se retiró porque el recorte se determina en PHP y ese JavaScript ya no se carga.
+
+## Limpieza del módulo
+
+Los archivos SQL de datos ficticios usados durante el desarrollo ya no forman parte del repositorio. Los testimonios cargados previamente en MySQL no se borran al eliminar esos scripts: se gestionan desde la bandeja de Coordinación o desde una base de desarrollo. Se conservan `esquema.sql` y `migracion_video_publico.sql` para la instalación y actualización del módulo.
