@@ -24,6 +24,7 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
 ?>
 
 <section class="contenedor seccion">
+    <p><a class="boton boton--secundario boton--pequeno" href="../index.php"><span aria-hidden="true">←</span> Ver testimonios públicos</a></p>
     <h1>Bandeja de Moderación TES</h1>
     <?php pintar_mensajes(); ?>
     <p><a class="boton boton--secundario" href="etiquetas.php">Administrar etiquetas</a></p>
