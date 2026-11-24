@@ -26,8 +26,6 @@ CREATE TABLE IF NOT EXISTS tes_testimonios (
 
     carrera_id INT UNSIGNED NULL,
 
-    generacion VARCHAR(20) NULL,
-
     testimonio TEXT NOT NULL,
 
     -- Nombre del archivo generado por el servidor.
