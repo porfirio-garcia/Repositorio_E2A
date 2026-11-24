@@ -68,25 +68,3 @@
     accent-color: var(--marca-700);
     flex-shrink: 0;
 }
-
-/* Ingreso y egreso: selectores adaptados al tipo de persona. */
-.tes-anios {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    margin-block: 1rem .4rem;
-}
-.tes-anios[hidden],
-.tes-anio-egreso[hidden],
-#tes-ayuda-anios[hidden] {
-    display: none !important;
-}
-.tes-anios .campo {
-    min-width: 0;
-    margin: 0;
-}
-@media (max-width: 640px) {
-    .tes-anios {
-        grid-template-columns: minmax(0, 1fr);
-    }
-}
