@@ -37,7 +37,7 @@ Solo los aprobados aparecen en el listado público.
 ## Etiquetas en el formulario público
 
 - Coordinación crea, renombra y elimina etiquetas desde `admin/etiquetas.php`.
-- El formulario público carga el catálogo actual y permite seleccionar ninguna, una o varias etiquetas mediante casillas.
+- El formulario público muestra un desplegable que contiene las etiquetas creadas por Coordinación, distribuidas en columnas adaptables. Se puede seleccionar ninguna, una o varias mediante casillas y un contador muestra cuántas se han elegido.
 - Al enviar el testimonio, PHP verifica que las etiquetas existan y guarda tanto el testimonio pendiente como sus relaciones en una transacción.
 - Si una validación falla, el formulario recupera las etiquetas seleccionadas.
 - Los testimonios solo aparecen públicamente si están aprobados. Los filtros por carrera, tipo y etiqueta se pueden combinar sin perder la paginación de nueve elementos.
