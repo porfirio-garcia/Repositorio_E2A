@@ -10,7 +10,7 @@
 
 - Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. Ya no se solicita generación ni años de estudio; la fecha de creación se registra automáticamente en MySQL. El video es opcional.
 - Coordinación entra a `modulos/testimonios/admin/` para publicar o rechazar los envíos pendientes. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
-- El listado público muestra los testimonios publicados de treinta en treinta. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran hasta **40 palabras** y **5 líneas**, con altura uniforme. El indicador **Ver más** aparece cuando el texto se recorta por palabras o líneas; toda la tarjeta sigue siendo clicable, incluso si el texto es corto. El testimonio completo se conserva en la ficha. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
+- El listado público muestra los testimonios publicados de treinta en treinta. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran hasta **40 palabras o 180 caracteres**, con **4 líneas** visibles, con altura uniforme. El indicador **Ver más** aparece cuando el texto se recorta por palabras o líneas; toda la tarjeta sigue siendo clicable, incluso si el texto es corto. El testimonio completo se conserva en la ficha. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
 ## Tipos de persona
 
 El módulo permite registrar testimonios de:
@@ -46,7 +46,7 @@ Solo los aprobados aparecen en el listado público.
 
 ## Listado y paginación
 
-- Se muestran 30 testimonios aprobados por página, distribuidos en 3 columnas y hasta 10 filas en pantallas de escritorio (2 columnas en tabletas, 1 en celulares), en tarjetas uniformes con extractos de hasta 40 palabras y cinco líneas; el texto completo se mantiene en la ficha.
+- Se muestran 30 testimonios aprobados por página, distribuidos en 3 columnas y hasta 10 filas en pantallas de escritorio (2 columnas en tabletas, 1 en celulares), en tarjetas uniformes con extractos de hasta 40 palabras, 180 caracteres y cuatro líneas; el texto completo se mantiene en la ficha.
 - Se eliminó el relleno extra del listado y se evita que las páginas con pocos resultados dejen un hueco grande antes del pie.
 - La navegación usa números de página, Anterior y Siguiente y conserva los filtros activos.
 - Los enlaces de regreso en el formulario, la ficha y las vistas administrativas usan botones del estilo común de la plataforma.
@@ -54,7 +54,7 @@ Solo los aprobados aparecen en el listado público.
 ## Límites de texto
 
 - El formulario acepta de 20 a 3000 **caracteres** por testimonio; no hay un límite de 100 palabras al enviar.
-- En el listado se muestran hasta 40 **palabras** y 5 líneas de cada testimonio, con `Ver más` si queda texto adicional. La ficha conserva y muestra el testimonio completo.
+- En el listado se muestran hasta 40 **palabras**, 180 caracteres y 4 líneas de cada testimonio, con `Ver más` si queda texto adicional. La ficha conserva y muestra el testimonio completo.
 - La paginación pública no cambia la bandeja de moderación.
 
 ## Limpieza del módulo
@@ -80,3 +80,5 @@ Los archivos SQL de datos ficticios usados durante el desarrollo ya no forman pa
 - El selector público de etiquetas conserva un ancho compacto cercano a 19 rem en escritorio y se adapta al ancho disponible en móviles.
 - Las opciones se despliegan sobre los testimonios, en un panel de posición absoluta, sin desplazar las tarjetas hacia abajo.
 - Al hacer clic fuera o pulsar Escape se cierra el panel sin perder la selección. Los filtros siguen actualizándose automáticamente al marcar o desmarcar etiquetas.
+
+- Los textos sin espacios también se truncan a 180 caracteres en el listado. El CSS reserva espacio para «Ver más» y evita que se superponga con el extracto. El texto completo permanece intacto en la ficha.
