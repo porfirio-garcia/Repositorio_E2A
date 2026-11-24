@@ -8,7 +8,7 @@
 
 ## Flujo
 
-- Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. El periodo se elige con selectores de año según el tipo de persona y el video es opcional.
+- Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. Ya no se solicita generación ni años de estudio; la fecha de creación se registra automáticamente en MySQL. El video es opcional.
 - Coordinación entra a `modulos/testimonios/admin/` para publicar o rechazar los envíos pendientes. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
 - El listado público muestra los testimonios publicados de treinta en treinta. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran hasta **40 palabras** y **5 líneas**, con altura uniforme. El indicador **Ver más** aparece cuando el texto se recorta por palabras o líneas; toda la tarjeta sigue siendo clicable, incluso si el texto es corto. El testimonio completo se conserva en la ficha. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
 ## Tipos de persona
@@ -61,11 +61,9 @@ Solo los aprobados aparecen en el listado público.
 
 Los archivos SQL de datos ficticios usados durante el desarrollo ya no forman parte del repositorio. Los testimonios cargados previamente en MySQL no se borran al eliminar esos scripts: se gestionan desde la bandeja de Coordinación o desde una base de desarrollo. Se conservan `esquema.sql` y `migracion_video_publico.sql` para la instalación y actualización del módulo.
 
-## Años de ingreso y egreso
+## Fecha de creación
 
-- El formulario ya no permite escribir manualmente la generación; ofrece selectores de años desde 1990 hasta el año actual.
-- Estudiantes: año de ingreso obligatorio; egreso oculto.
-- Egresados: ingreso y egreso obligatorios; egreso no puede ser anterior al ingreso.
-- Familiares: ingreso y egreso del estudiante son opcionales; pueden omitirse ambos.
-- La validación se aplica tanto en JavaScript como en PHP. Se mantienen los datos ingresados cuando el formulario retorna por un error.
-- Los valores se guardan en la columna existente `generacion` (por ejemplo `2023`, `2023-2026`, o `Egreso 2026`); los testimonios anteriores no se alteran y no es necesaria una migración.
+- El formulario no solicita generación ni años de ingreso o egreso.
+- El listado y la ficha muestran «Creado el» con fecha en formato día/mes/año, obtenida de `tes_testimonios.creado_en`.
+- Los nuevos envíos obtienen la fecha automáticamente por el valor predeterminado de la columna; no se necesita escribirla desde PHP.
+- El esquema para instalaciones nuevas ya no crea la columna `generacion`. Si tu MySQL ya tenía esa columna, puede permanecer sin causar problemas: dejamos de utilizarla, sin borrar los datos históricos ni requerir una migración destructiva.
