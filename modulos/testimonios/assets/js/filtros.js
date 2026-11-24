@@ -3,7 +3,23 @@
     const resultados = document.getElementById('tes-resultados');
     const contador = formulario?.querySelector('.tes-filtro-etiquetas__contador');
     const limpiar = document.getElementById('tes-limpiar-etiquetas');
+    const desplegable = document.getElementById('tes-filtro-desplegable');
     if (!formulario || !resultados) return;
+
+    // El selector es un menú flotante: se cierra al hacer clic fuera
+    // o al pulsar Escape, sin borrar las etiquetas seleccionadas.
+    document.addEventListener('pointerdown', (evento) => {
+        if (desplegable?.open && !desplegable.contains(evento.target)) {
+            desplegable.open = false;
+        }
+    });
+
+    document.addEventListener('keydown', (evento) => {
+        if (evento.key === 'Escape' && desplegable?.open) {
+            desplegable.open = false;
+            desplegable.querySelector('summary')?.focus();
+        }
+    });
 
     let solicitud = null;
     let version = 0;
