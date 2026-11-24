@@ -217,8 +217,9 @@ a.tes-tarjeta:focus-visible {
     max-height: 17rem;
 }
 .tes-tarjeta .tarjeta__cuerpo {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    align-content: start;
     gap: .3rem;
     padding: .85rem .9rem;
     min-height: 0;
@@ -247,17 +248,19 @@ a.tes-tarjeta:focus-visible {
 .tes-tarjeta__extracto {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
-    line-clamp: 5;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
     line-height: 1.45;
-    max-height: 7.25em;
+    min-height: 0;
+    max-height: 5.8em;
     overflow: hidden;
     overflow-wrap: anywhere;
-    word-break: normal;
+    word-break: break-word;
 }
 .tes-tarjeta .tes-tarjeta__accion {
-    align-self: flex-start;
-    margin-top: auto;
+    align-self: end;
+    justify-self: start;
+    margin-top: 0;
     padding: .3rem .7rem;
     border: 1px solid var(--borde-fuerte);
     border-radius: var(--radio-sm);
