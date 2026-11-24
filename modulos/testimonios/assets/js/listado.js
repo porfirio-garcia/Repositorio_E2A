@@ -12,7 +12,8 @@
 
             // scrollHeight incluye las líneas que el CSS ha recortado.
             // clientHeight refleja el espacio que realmente está visible.
-            const recortado = texto.scrollHeight > texto.clientHeight + 1;
+            const recortado = texto.dataset.recortadoPalabras === '1'
+                || texto.scrollHeight > texto.clientHeight + 1;
 
             accion.textContent = recortado ? 'Leer más' : 'Ver testimonio';
         });
