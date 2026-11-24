@@ -120,3 +120,63 @@
 .tes-video-publico { margin-block: 1.5rem 2rem; }
 .tes-video-publico h2 { margin-bottom: .75rem; font-size: 1.15rem; }
 .tes-video-publico video { display: block; width: 100%; max-height: 34rem; background: #101827; border-radius: .85rem; }
+
+/* Toda la tarjeta es un enlace, incluidas las etiquetas solo informativas. */
+a.tes-tarjeta {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+a.tes-tarjeta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(12, 34, 73, .12);
+    border-color: var(--marca-700);
+}
+a.tes-tarjeta:focus-visible {
+    outline: 3px solid var(--marca-700);
+    outline-offset: 3px;
+}
+.tes-tarjeta__accion {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    color: var(--marca-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.tes-tarjeta .tes-etiquetas .insignia {
+    text-decoration: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    a.tes-tarjeta { transition: none; }
+    a.tes-tarjeta:hover { transform: none; }
+}
+
+/* Limpiar filtros con una X accesible y un estilo similar al botón Filtrar. */
+.tes-limpiar-filtros {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 44px;
+    min-height: 44px;
+    padding: .4rem;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-md);
+    background: var(--blanco);
+    color: var(--marca-700);
+    font-size: 1.5rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: background .18s ease, border-color .18s ease;
+}
+.tes-limpiar-filtros:hover {
+    background: var(--marca-100);
+    border-color: var(--marca-700);
+}
+.tes-limpiar-filtros:focus-visible {
+    outline: 3px solid var(--marca-700);
+    outline-offset: 2px;
+}
