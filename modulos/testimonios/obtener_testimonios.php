@@ -53,7 +53,7 @@ function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina, ?int
 
     $consulta = bd()->prepare(
         "SELECT t.id, t.nombre, t.tipo_persona, t.generacion, c.nombre AS carrera,
-                LEFT(t.testimonio, 100) AS extracto, CHAR_LENGTH(t.testimonio) > 100 AS tiene_mas
+                t.testimonio AS extracto
          FROM tes_testimonios t
          LEFT JOIN carreras c ON c.id = t.carrera_id
          WHERE $donde
