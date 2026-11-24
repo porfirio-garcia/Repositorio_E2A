@@ -35,3 +35,34 @@
 .tes-formulario {
     margin-inline: auto;
 }
+/* Selección múltiple de etiquetas públicas. */
+.tes-campo-etiquetas {
+    border: 0;
+    padding: 0;
+    min-width: 0;
+}
+.tes-campo-etiquetas legend {
+    padding: 0;
+}
+.tes-opciones-etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-block: .75rem 1.25rem;
+}
+.tes-opcion-etiqueta-publica {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .55rem .85rem;
+    border: 1px solid var(--marca-700);
+    border-radius: .65rem;
+    cursor: pointer;
+}
+.tes-opcion-etiqueta-publica:has(input:checked) {
+    background: var(--marca-100, #eaf4ef);
+    font-weight: 600;
+}
+.tes-opcion-etiqueta-publica input {
+    accent-color: var(--marca-700);
+}
