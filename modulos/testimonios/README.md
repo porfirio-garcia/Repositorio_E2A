@@ -11,7 +11,7 @@
 
 - Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. La generación y el video para revisión son opcionales.
 - Coordinación entra a `modulos/testimonios/admin/` para publicar o rechazar los envíos pendientes. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
-- El listado público muestra los testimonios publicados de nueve en nueve. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas también son enlaces de filtrado desde las tarjetas. Las tarjetas muestran hasta 100 caracteres; cada una permite abrir la ficha individual mediante el nombre y el enlace **Leer más** (para textos extensos) o **Ver testimonio** (para textos de hasta 100 caracteres). El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
+- El listado público muestra los testimonios publicados de nueve en nueve. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran hasta 100 caracteres; toda la tarjeta se puede pulsar para abrir la ficha individual. El texto de acción indica **Leer más** o **Ver testimonio** según la longitud del contenido. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
 ## Tipos de persona
 
 El módulo permite registrar testimonios de:
@@ -42,3 +42,5 @@ Solo los aprobados aparecen en el listado público.
 - Si una validación falla, el formulario recupera las etiquetas seleccionadas.
 - Los testimonios solo aparecen públicamente si están aprobados. Los filtros por carrera, tipo y etiqueta se pueden combinar sin perder la paginación de nueve elementos.
 - No se requieren nuevas tablas: se reutilizan `tes_etiquetas` y `tes_testimonio_etiqueta`.
+
+- Para eliminar los filtros activos, el listado muestra una X junto a **Filtrar**, con descripción accesible «Limpiar filtros».
