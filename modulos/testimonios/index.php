@@ -4,10 +4,17 @@ declare(strict_types=1);
 require_once __DIR__ . '/obtener_testimonios.php';
 
 $opcionesCarrera = carreras();
+$opcionesEtiqueta = tes_etiquetas_disponibles();
 
 $carreraId = filter_input(
     INPUT_GET,
     'carrera',
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1]]
+) ?: null;
+$etiquetaId = filter_input(
+    INPUT_GET,
+    'etiqueta',
     FILTER_VALIDATE_INT,
     ['options' => ['min_range' => 1]]
 ) ?: null;
@@ -16,12 +23,12 @@ $tipos = ['estudiante' => 'Estudiantes', 'egresado' => 'Egresados', 'familiar' =
 $tipo = is_string($tipo) && isset($tipos[$tipo]) ? $tipo : null;
 $pagina = filter_input(INPUT_GET, 'pagina', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 1;
 
-$listado = tes_listar_publicados($carreraId, $tipo, $pagina);
+$listado = tes_listar_publicados($carreraId, $tipo, $pagina, $etiquetaId);
 $testimonios = $listado['testimonios'];
 $pagina = $listado['pagina'];
 $paginas = $listado['paginas'];
 $etiquetas = tes_etiquetas_por_testimonio(array_column($testimonios, 'id'));
-$filtrosActivos = array_filter(['carrera' => $carreraId, 'tipo' => $tipo]);
+$filtrosActivos = array_filter(['carrera' => $carreraId, 'tipo' => $tipo, 'etiqueta' => $etiquetaId]);
 
 $enlacePagina = static fn (int $numero): string => '?' . http_build_query($filtrosActivos + ['pagina' => $numero]);
 
@@ -65,6 +72,18 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
                 <?php endforeach; ?>
             </select>
         </div>
+        <div class="campo">
+            <label class="campo__etiqueta" for="etiqueta">Etiqueta</label>
+            <select class="campo__control" id="etiqueta" name="etiqueta">
+                <option value="">Todas las etiquetas</option>
+                <?php foreach ($opcionesEtiqueta as $tag): ?>
+                    <option value="<?= (int) $tag['id'] ?>"
+                        <?= $etiquetaId === (int) $tag['id'] ? 'selected' : '' ?>>
+                        <?= e($tag['nombre']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
         <button class="boton boton--secundario" type="submit">Filtrar</button>
         <?php if ($filtrosActivos): ?>
             <a href="index.php">Limpiar filtros</a>
@@ -103,9 +122,11 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
                     <?php if (isset($etiquetas[$t['id']])): ?>
                         <div class="tarjeta__pie tes-etiquetas">
                             <?php foreach ($etiquetas[$t['id']] as $tag): ?>
-                                <span class="insignia insignia--info">
+                                <a class="insignia insignia--info"
+                                   href="<?= e('?' . http_build_query(array_merge($filtrosActivos, ['etiqueta' => (int) $tag['id'], 'pagina' => 1]))) ?>"
+                                   aria-label="<?= e('Filtrar por etiqueta ' . $tag['nombre']) ?>">
                                     <?= e($tag['nombre']) ?>
-                                </span>
+                                </a>
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
