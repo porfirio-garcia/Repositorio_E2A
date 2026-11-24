@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/** Catálogo creado por Coordinación, visible en el formulario y el filtro público. */
+function tes_etiquetas_disponibles(): array
+{
+    return bd()->query('SELECT id, nombre FROM tes_etiquetas ORDER BY nombre')->fetchAll();
+}
+
 /** Agrupa las etiquetas de los testimonios solicitados en una sola consulta. */
 function tes_etiquetas_por_testimonio(array $ids): array
 {
