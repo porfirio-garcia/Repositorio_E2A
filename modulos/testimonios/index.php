@@ -111,8 +111,8 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
     · <?= e($t['generacion']) ?>
 <?php endif; ?>
                         </p>
-                        <p class="tes-tarjeta__extracto"><?= e($t['extracto']) ?><?= $t['tiene_mas'] ? '…' : '' ?></p>
-                        <span class="tes-tarjeta__accion"><?= $t['tiene_mas'] ? 'Leer más' : 'Ver testimonio' ?> <span aria-hidden="true">→</span></span>
+                        <p class="tes-tarjeta__extracto"><?= e($t['extracto']) ?></p>
+                        <span class="tes-tarjeta__accion"><span class="tes-tarjeta__accion-texto">Ver testimonio</span> <span aria-hidden="true">→</span></span>
                     </div>
                     <?php if (isset($etiquetas[$t['id']])): ?>
                         <div class="tarjeta__pie tes-etiquetas">
@@ -164,5 +164,6 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
     <?php endif; ?>
 </section>
 
+<script src="assets/js/listado.js?v=<?= filemtime(__DIR__ . '/assets/js/listado.js') ?>" defer></script>
 <?php require __DIR__ . '/includes/cta.php'; ?>
 <?php pie(); ?>
