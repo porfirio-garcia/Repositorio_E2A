@@ -206,56 +206,79 @@ a.tes-tarjeta:focus-visible {
     }
 }
 
-/* Cada tarjeta termina donde finaliza su extracto, sin altura fija. */
+/* Tarjetas uniformes en escritorio: 40 palabras y máximo cinco líneas visibles. */
 #testimonios .rejilla {
-    align-items: start;
+    align-items: stretch;
 }
 .tes-tarjeta {
-    height: auto;
-    min-height: 0;
-    max-height: none;
+    height: 17rem;
+    min-height: 17rem;
+    max-height: 17rem;
 }
 .tes-tarjeta .tarjeta__cuerpo {
     display: flex;
     flex-direction: column;
-    gap: .35rem;
-    padding: .8rem .9rem;
-    overflow: visible;
+    gap: .3rem;
+    padding: .85rem .9rem;
     min-height: 0;
+    overflow: hidden;
 }
 .tes-tarjeta .tarjeta__cuerpo p,
 .tes-tarjeta .tarjeta__titulo {
     margin-bottom: 0;
 }
-.tes-tarjeta .tarjeta__titulo,
-.tes-tarjeta__metadatos,
+.tes-tarjeta .tarjeta__titulo {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.tes-tarjeta__metadatos {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    flex-shrink: 0;
+}
 .tes-tarjeta__extracto {
-    display: block;
-    overflow: visible;
-    max-height: none;
-    -webkit-line-clamp: unset;
-    line-clamp: unset;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    line-height: 1.45;
+    max-height: 7.25em;
+    overflow: hidden;
     overflow-wrap: anywhere;
     word-break: normal;
 }
-.tes-tarjeta__extracto {
-    line-height: 1.45;
-    white-space: normal;
-}
 .tes-tarjeta .tes-tarjeta__accion {
     align-self: flex-start;
-    margin-top: .3rem;
+    margin-top: auto;
     padding: .3rem .7rem;
     border: 1px solid var(--borde-fuerte);
     border-radius: var(--radio-sm);
     text-decoration: none;
     font-size: .9rem;
+    flex-shrink: 0;
+}
+.tes-tarjeta .tes-tarjeta__accion[hidden] {
+    display: none !important;
 }
 .tes-tarjeta .tarjeta__pie {
-    flex-wrap: wrap;
-    max-height: none;
-    overflow: visible;
+    max-height: 2.8rem;
+    overflow: hidden;
     padding: .5rem .9rem;
+    flex: 0 0 auto;
+}
+@media (max-width: 619px) {
+    .tes-tarjeta {
+        height: 16.5rem;
+        min-height: 16.5rem;
+        max-height: 16.5rem;
+    }
 }
 
 /* Navegación numerada: anterior, página activa y siguiente. */
