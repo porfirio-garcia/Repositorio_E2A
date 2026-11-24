@@ -97,7 +97,7 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
     <?php else: ?>
         <div class="rejilla">
             <?php foreach ($testimonios as $t): ?>
-                <?php $resumen = tes_resumir_testimonio($t['extracto'], 100); ?>
+                <?php $resumen = tes_resumir_testimonio($t['extracto'], 40); ?>
                 <a class="tarjeta tes-tarjeta" href="ficha.php?id=<?= (int) $t['id'] ?>" aria-label="<?= e('Ver testimonio de ' . $t['nombre']) ?>">
                     <div class="tarjeta__cuerpo">
                         <h2 class="tarjeta__titulo"><?= e($t['nombre']) ?></h2>
@@ -113,9 +113,11 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
 <?php endif; ?>
                         </p>
                         <p class="tes-tarjeta__extracto"><?= e($resumen['texto']) ?><?= $resumen['recortado'] ? '…' : '' ?></p>
-                        <?php if ($resumen['recortado']): ?>
-                            <span class="tes-tarjeta__accion">Ver más <span aria-hidden="true">→</span></span>
-                        <?php endif; ?>
+                        <span class="tes-tarjeta__accion"
+                              data-recortado-palabras="<?= $resumen['recortado'] ? '1' : '0' ?>"
+                              <?= $resumen['recortado'] ? '' : 'hidden' ?>>
+                            Ver más <span aria-hidden="true">→</span>
+                        </span>
                     </div>
                     <?php if (isset($etiquetas[$t['id']])): ?>
                         <div class="tarjeta__pie tes-etiquetas">
@@ -167,5 +169,6 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
     <?php endif; ?>
 </section>
 
+<script src="assets/js/tarjetas.js?v=<?= filemtime(__DIR__ . '/assets/js/tarjetas.js') ?>" defer></script>
 <?php require __DIR__ . '/includes/cta.php'; ?>
 <?php pie(); ?>
