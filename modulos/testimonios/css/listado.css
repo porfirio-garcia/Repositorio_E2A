@@ -336,3 +336,66 @@ a.tes-paginacion__control:hover {
     outline: 3px solid var(--marca-700);
     outline-offset: 2px;
 }
+
+/* Filtro público multiselección: etiquetas en desplegable. */
+.tes-filtro-etiquetas {
+    margin: 0;
+    padding: 0;
+    min-width: min(100%, 17rem);
+    border: 0;
+}
+.tes-filtro-etiquetas__desplegable {
+    position: relative;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-sm);
+    background: var(--blanco);
+}
+.tes-filtro-etiquetas__desplegable summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    min-height: 44px;
+    padding: .6rem .75rem;
+    font-size: .9rem;
+    cursor: pointer;
+}
+.tes-filtro-etiquetas__contador {
+    color: var(--texto-suave);
+    font-size: .75rem;
+    white-space: nowrap;
+}
+.tes-filtro-etiquetas__panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: .85rem;
+    border-top: 1px solid var(--borde);
+    max-height: 16rem;
+    overflow-y: auto;
+}
+.tes-filtro-etiquetas__opcion {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .65rem;
+    max-width: 100%;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-md);
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+.tes-filtro-etiquetas__opcion:has(input:checked) {
+    background: var(--marca-100);
+    border-color: var(--marca-700);
+}
+.tes-filtro-etiquetas__opcion input {
+    accent-color: var(--marca-700);
+}
+#tes-resultados[aria-busy="true"] {
+    opacity: .65;
+    transition: opacity .12s ease;
+}
+.tes-limpiar-filtros[hidden] {
+    display: none !important;
+}
