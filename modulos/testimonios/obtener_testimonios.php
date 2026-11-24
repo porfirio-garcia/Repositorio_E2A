@@ -7,22 +7,31 @@ require_once __DIR__ . '/includes/etiquetas.php';
 const TES_POR_PAGINA = 30;
 
 /**
- * Limita el extracto a 40 palabras separadas por espacios.
- * El diseño recorta visualmente el texto a cinco líneas.
- * El texto íntegro permanece en la ficha del testimonio.
+ * El extracto público usa un máximo de 40 palabras Y 180 caracteres.
+ * El límite de caracteres protege la cuadrícula ante textos sin espacios.
+ * El testimonio original en la base de datos no se modifica.
  */
-function tes_resumir_testimonio(string $texto, int $limitePalabras = 40): array
+function tes_resumir_testimonio(string $texto, int $limitePalabras = 40, int $limiteCaracteres = 180): array
 {
-    $palabras = preg_split('/\\s+/u', trim($texto), $limitePalabras + 1, PREG_SPLIT_NO_EMPTY);
+    $texto = trim($texto);
+    if ($texto === '') {
+        return ['texto' => '', 'recortado' => false];
+    }
+
+    $palabras = preg_split('/\\s+/u', $texto, $limitePalabras + 1, PREG_SPLIT_NO_EMPTY);
     if ($palabras === false || $palabras === []) {
         return ['texto' => '', 'recortado' => false];
     }
 
     $recortado = count($palabras) > $limitePalabras;
-    return [
-        'texto' => implode(' ', array_slice($palabras, 0, $limitePalabras)),
-        'recortado' => $recortado,
-    ];
+    $extracto = implode(' ', array_slice($palabras, 0, $limitePalabras));
+
+    if (mb_strlen($extracto, 'UTF-8') > $limiteCaracteres) {
+        $extracto = rtrim(mb_substr($extracto, 0, $limiteCaracteres, 'UTF-8'));
+        $recortado = true;
+    }
+
+    return ['texto' => $extracto, 'recortado' => $recortado];
 }
 
 function tes_etiquetas_publicas(): array
