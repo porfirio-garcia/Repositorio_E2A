@@ -74,3 +74,9 @@ Los archivos SQL de datos ficticios usados durante el desarrollo ya no forman pa
 - `assets/js/filtros.js` actualiza el listado mediante solicitudes GET al cambiar cualquier filtro, conserva el historial del navegador y permite avanzar o retroceder en las páginas sin recarga completa.
 - `assets/js/tarjetas.js` vuelve a calcular cuándo mostrar «Ver más» después de cada actualización.
 - Se aceptan varias etiquetas con `etiquetas[]` y se mantiene compatibilidad con enlaces antiguos `?etiqueta=ID`.
+
+## Desplegable flotante de etiquetas
+
+- El selector público de etiquetas conserva un ancho compacto cercano a 19 rem en escritorio y se adapta al ancho disponible en móviles.
+- Las opciones se despliegan sobre los testimonios, en un panel de posición absoluta, sin desplazar las tarjetas hacia abajo.
+- Al hacer clic fuera o pulsar Escape se cierra el panel sin perder la selección. Los filtros siguen actualizándose automáticamente al marcar o desmarcar etiquetas.
