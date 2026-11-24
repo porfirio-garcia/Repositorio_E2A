@@ -339,14 +339,18 @@ a.tes-paginacion__control:hover {
 }
 
 /* Filtro público multiselección: etiquetas en desplegable. */
-.tes-filtro-etiquetas {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    flex: 0 1 19rem;
+.tes-filtros {
+    align-items: flex-end;
+}
+.tes-filtros .campo.tes-filtro-etiquetas {
+    flex: 0 0 19rem;
     width: 19rem;
     max-width: 100%;
     min-width: 0;
+    margin: 0;
+}
+.tes-filtro-etiquetas > .campo__etiqueta {
+    margin-bottom: var(--e2);
 }
 .tes-filtro-etiquetas__desplegable {
     position: relative;
@@ -362,15 +366,22 @@ a.tes-paginacion__control:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: .5rem;
-    min-height: 44px;
-    padding: .6rem .75rem;
-    font-size: .9rem;
+    gap: .4rem;
+    height: 48px;
+    min-height: 48px;
+    padding: .5rem .75rem;
+    font-size: .875rem;
+    line-height: 1.2;
     cursor: pointer;
+}
+.tes-filtro-etiquetas__desplegable summary > span:first-child {
+    min-width: 0;
+    white-space: nowrap;
 }
 .tes-filtro-etiquetas__contador {
     color: var(--texto-suave);
-    font-size: .75rem;
+    font-size: .72rem;
+    flex-shrink: 0;
     white-space: nowrap;
 }
 .tes-filtro-etiquetas__panel {
@@ -416,4 +427,11 @@ a.tes-paginacion__control:hover {
 }
 .tes-limpiar-filtros[hidden] {
     display: none !important;
+}
+
+@media (max-width: 640px) {
+    .tes-filtros .campo.tes-filtro-etiquetas {
+        flex: 1 1 100%;
+        width: 100%;
+    }
 }
