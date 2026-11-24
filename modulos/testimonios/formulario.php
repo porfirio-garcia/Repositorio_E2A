@@ -131,20 +131,32 @@ cabecera('Subir testimonio', '', 'css/modulo.css?v=' . filemtime(__DIR__ . '/css
         <!-- ETIQUETAS DEFINIDAS POR COORDINACIÓN -->
         <fieldset class="campo tes-campo-etiquetas">
             <legend class="campo__etiqueta">Etiquetas (opcional)</legend>
-            <p class="campo__ayuda">Selecciona los temas que describen tu experiencia.</p>
+            <p class="campo__ayuda">Puedes elegir varias etiquetas para describir tu experiencia.</p>
+
             <?php if (!$listaEtiquetas): ?>
                 <p class="campo__ayuda">Todavía no hay etiquetas disponibles.</p>
             <?php else: ?>
-                <div class="tes-opciones-etiquetas">
-                    <?php foreach ($listaEtiquetas as $tag): ?>
-                        <label class="tes-opcion-etiqueta-publica">
-                            <input type="checkbox" name="etiquetas[]"
-                                   value="<?= (int) $tag['id'] ?>"
-                                   <?= in_array((int) $tag['id'], $datosFormulario['etiquetas'] ?? [], true) ? 'checked' : '' ?>>
-                            <span><?= e($tag['nombre']) ?></span>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
+                <details class="tes-etiquetas-desplegable" <?= !empty($datosFormulario['etiquetas']) ? 'open' : '' ?>>
+                    <summary class="tes-etiquetas-desplegable__resumen">
+                        <span>Seleccionar etiquetas</span>
+                        <span class="tes-etiquetas-desplegable__contador" aria-live="polite">
+                            <?php $cantidadElegidas = count($datosFormulario['etiquetas'] ?? []); ?>
+                            <?= $cantidadElegidas ? $cantidadElegidas . ' seleccionada' . ($cantidadElegidas === 1 ? '' : 's') : 'Ninguna seleccionada' ?>
+                        </span>
+                    </summary>
+                    <div class="tes-etiquetas-desplegable__panel">
+                        <div class="tes-opciones-etiquetas">
+                            <?php foreach ($listaEtiquetas as $tag): ?>
+                                <label class="tes-opcion-etiqueta-publica">
+                                    <input type="checkbox" name="etiquetas[]"
+                                           value="<?= (int) $tag['id'] ?>"
+                                           <?= in_array((int) $tag['id'], $datosFormulario['etiquetas'] ?? [], true) ? 'checked' : '' ?>>
+                                    <span><?= e($tag['nombre']) ?></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </details>
             <?php endif; ?>
         </fieldset>
 
