@@ -98,12 +98,12 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
                 <?php endforeach; ?>
             </select>
         </div>
-        <fieldset class="tes-filtro-etiquetas">
-            <legend class="campo__etiqueta">Etiquetas</legend>
+        <div class="campo tes-filtro-etiquetas">
+            <span class="campo__etiqueta" id="tes-etiquetas-titulo">Etiquetas</span>
             <details class="tes-filtro-etiquetas__desplegable" id="tes-filtro-desplegable">
-                <summary>
-                    <span>Seleccionar etiquetas</span>
-                    <span class="tes-filtro-etiquetas__contador"><?= count($etiquetasIds) ?> seleccionadas</span>
+                <summary aria-labelledby="tes-etiquetas-titulo tes-etiquetas-seleccionar">
+                    <span id="tes-etiquetas-seleccionar">Seleccionar etiquetas</span>
+                    <span class="tes-filtro-etiquetas__contador" aria-live="polite"><?= count($etiquetasIds) ?> <?= count($etiquetasIds) === 1 ? 'seleccionada' : 'seleccionadas' ?></span>
                 </summary>
                 <div class="tes-filtro-etiquetas__panel">
                     <?php foreach ($opcionesEtiqueta as $tag): ?>
@@ -118,7 +118,7 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
                     <?php endif; ?>
                 </div>
             </details>
-        </fieldset>
+        </div>
         <button class="tes-limpiar-filtros" type="button" id="tes-limpiar-etiquetas"
                 aria-label="Limpiar únicamente etiquetas" title="Limpiar etiquetas"
                 <?= $etiquetasIds ? '' : 'hidden' ?>>&times;</button>
