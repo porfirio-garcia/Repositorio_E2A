@@ -26,8 +26,8 @@ cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css?v=' . fi
     · <?= e($testimonio['carrera']) ?>
 <?php endif; ?>
 
-<?php if (!empty($testimonio['generacion'])): ?>
-    · <?= e($testimonio['generacion']) ?>
+<?php if (!empty($testimonio['creado_en'])): ?>
+    · Publicado el <?= e((new DateTimeImmutable($testimonio['creado_en']))->format('d/m/Y')) ?>
 <?php endif; ?>
         </p>
         <p class="tes-texto-completo"><?= e($testimonio['testimonio']) ?></p>
