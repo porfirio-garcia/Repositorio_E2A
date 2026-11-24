@@ -189,19 +189,22 @@ a.tes-tarjeta:focus-visible {
     outline-offset: 2px;
 }
 
-/* Tarjetas compactas, uniformes y todavía totalmente clicables. */
+/* Cada tarjeta termina donde finaliza su extracto, sin altura fija. */
+#testimonios .rejilla {
+    align-items: start;
+}
 .tes-tarjeta {
-    height: 11.5rem;
-    min-height: 11.5rem;
-    max-height: 11.5rem;
+    height: auto;
+    min-height: 0;
+    max-height: none;
 }
 .tes-tarjeta .tarjeta__cuerpo {
     display: flex;
     flex-direction: column;
-    gap: .2rem;
+    gap: .35rem;
+    padding: .8rem .9rem;
+    overflow: visible;
     min-height: 0;
-    overflow: hidden;
-    padding: .7rem .85rem;
 }
 .tes-tarjeta .tarjeta__cuerpo p,
 .tes-tarjeta .tarjeta__titulo {
@@ -210,40 +213,32 @@ a.tes-tarjeta:focus-visible {
 .tes-tarjeta .tarjeta__titulo,
 .tes-tarjeta__metadatos,
 .tes-tarjeta__extracto {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-.tes-tarjeta .tarjeta__titulo {
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-    flex-shrink: 0;
-}
-.tes-tarjeta__metadatos {
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    flex-shrink: 0;
+    display: block;
+    overflow: visible;
+    max-height: none;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow-wrap: anywhere;
+    word-break: normal;
 }
 .tes-tarjeta__extracto {
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    flex: 0 0 auto;
-    max-height: 2.8em;
-    line-height: 1.4;
-    min-width: 0;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    line-height: 1.45;
+    white-space: normal;
 }
 .tes-tarjeta .tes-tarjeta__accion {
-    margin-top: auto;
-    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: .3rem;
+    padding: .3rem .7rem;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-sm);
+    text-decoration: none;
+    font-size: .9rem;
 }
 .tes-tarjeta .tarjeta__pie {
-    flex: 0 0 auto;
     flex-wrap: wrap;
-    max-height: 2.8rem;
-    padding: .5rem .85rem;
-    overflow: hidden;
+    max-height: none;
+    overflow: visible;
+    padding: .5rem .9rem;
 }
 
 /* Navegación numerada: anterior, página activa y siguiente. */
