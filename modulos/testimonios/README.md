@@ -11,7 +11,7 @@
 
 - Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. La generación y el video para revisión son opcionales.
 - Coordinación entra a `modulos/testimonios/admin/` para publicar o rechazar los envíos pendientes. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
-- El listado público muestra los testimonios publicados de diez en diez. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran un extracto de hasta **100 palabras separadas por espacios**, recortado visualmente a un máximo de dos líneas. Toda la tarjeta se puede pulsar para abrir la ficha individual. **Leer más** aparece si el extracto se limita por palabras o se corta por espacio; **Ver testimonio**, si cabe completo. El texto original no se modifica y permanece íntegro en la ficha. El cálculo visual se actualiza al cambiar el ancho de la tarjeta. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
+- El listado público muestra los testimonios publicados de diez en diez. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran las primeras **100 palabras separadas por espacios** sin recorte por número de líneas. Cada tarjeta adapta su altura al texto visible. El enlace visual **Ver más** solo aparece cuando hay palabras adicionales después de las primeras 100; toda la tarjeta sigue siendo clicable, incluso si el texto es corto. El testimonio completo se conserva en la ficha. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
 ## Tipos de persona
 
 El módulo permite registrar testimonios de:
@@ -47,7 +47,7 @@ Solo los aprobados aparecen en el listado público.
 
 ## Listado y pruebas de paginación
 
-- Se muestran 10 testimonios aprobados por página, en tarjetas compactas de 11.5 rem de altura uniforme; los textos del listado se recortan visualmente, sin modificar el contenido completo de la ficha.
+- Se muestran 10 testimonios aprobados por página, en tarjetas de altura automática según el extracto de hasta 100 palabras; el texto completo se mantiene en la ficha.
 - Se eliminó el relleno extra del listado y se evita que las páginas con pocos resultados dejen un hueco grande antes del pie.
 - La navegación usa números de página, Anterior y Siguiente y conserva los filtros activos.
 - Los enlaces de regreso en el formulario, la ficha y las vistas administrativas usan botones del estilo común de la plataforma.
