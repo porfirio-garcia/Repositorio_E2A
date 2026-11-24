@@ -4,7 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../nucleo/comun.php';
 require_once __DIR__ . '/includes/etiquetas.php';
 
-const TES_POR_PAGINA = 10;
+const TES_POR_PAGINA = 30;
 
 /**
  * Limita el extracto a 100 palabras separadas por espacios.
