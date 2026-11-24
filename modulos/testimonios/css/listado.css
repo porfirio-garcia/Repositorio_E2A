@@ -207,7 +207,7 @@ a.tes-tarjeta:focus-visible {
     }
 }
 
-/* Tarjetas uniformes en escritorio: 40 palabras y máximo cinco líneas visibles. */
+/* Tarjetas uniformes: extracto de hasta 40 palabras y tres líneas visibles. */
 #testimonios .rejilla {
     align-items: stretch;
 }
@@ -217,11 +217,13 @@ a.tes-tarjeta:focus-visible {
     max-height: 17rem;
 }
 .tes-tarjeta .tarjeta__cuerpo {
+    /* Reservar una fila exclusiva para el botón: nunca comparte espacio
+       con un texto largo, aunque no tenga separadores. */
     display: grid;
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
-    align-content: start;
+    grid-template-rows: min-content min-content minmax(0, 1fr) min-content;
     gap: .3rem;
-    padding: .85rem .9rem;
+    padding: .75rem .9rem;
+    flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
 }
@@ -246,13 +248,12 @@ a.tes-tarjeta:focus-visible {
     flex-shrink: 0;
 }
 .tes-tarjeta__extracto {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-    line-height: 1.45;
+    display: block;
+    min-width: 0;
     min-height: 0;
-    max-height: 5.8em;
+    height: auto;
+    max-height: 4.35em; /* hasta tres líneas, sin cortar el espacio del botón */
+    line-height: 1.45;
     overflow: hidden;
     overflow-wrap: anywhere;
     word-break: break-word;
@@ -260,13 +261,17 @@ a.tes-tarjeta:focus-visible {
 .tes-tarjeta .tes-tarjeta__accion {
     align-self: end;
     justify-self: start;
-    margin-top: 0;
+    display: inline-flex;
+    position: relative;
+    margin-top: .15rem;
     padding: .3rem .7rem;
     border: 1px solid var(--borde-fuerte);
     border-radius: var(--radio-sm);
+    background: var(--blanco);
     text-decoration: none;
     font-size: .9rem;
-    flex-shrink: 0;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 .tes-tarjeta .tes-tarjeta__accion[hidden] {
     display: none !important;
