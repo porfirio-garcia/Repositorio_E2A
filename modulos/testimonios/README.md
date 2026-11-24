@@ -39,10 +39,10 @@ Solo los aprobados aparecen en el listado público.
 - El formulario público muestra un desplegable que contiene las etiquetas creadas por Coordinación, distribuidas en columnas adaptables. Se puede seleccionar ninguna, una o varias mediante casillas y un contador muestra cuántas se han elegido.
 - Al enviar el testimonio, PHP verifica que las etiquetas existan y guarda tanto el testimonio pendiente como sus relaciones en una transacción.
 - Si una validación falla, el formulario recupera las etiquetas seleccionadas.
-- Los testimonios solo aparecen públicamente si están aprobados. Los filtros por carrera, tipo y etiqueta se pueden combinar sin perder la paginación de treinta elementos.
+- Los testimonios solo aparecen públicamente si están aprobados. Carrera, tipo de persona y varias etiquetas se combinan automáticamente sin pulsar «Filtrar» y sin recargar toda la página. Las etiquetas coinciden por cualquiera de las seleccionadas; la paginación conserva los filtros activos.
 - No se requieren nuevas tablas: se reutilizan `tes_etiquetas` y `tes_testimonio_etiqueta`.
 
-- Para eliminar los filtros activos, el listado muestra una X junto a **Filtrar**, con descripción accesible «Limpiar filtros».
+- La X limpia **solo las etiquetas** seleccionadas y conserva la carrera y el tipo de persona. Sin JavaScript, se muestra el botón «Aplicar filtros» como alternativa.
 
 ## Listado y paginación
 
@@ -67,3 +67,10 @@ Los archivos SQL de datos ficticios usados durante el desarrollo ya no forman pa
 - El listado y la ficha muestran «Creado el» con fecha en formato día/mes/año, obtenida de `tes_testimonios.creado_en`.
 - Los nuevos envíos obtienen la fecha automáticamente por el valor predeterminado de la columna; no se necesita escribirla desde PHP.
 - El esquema para instalaciones nuevas ya no crea la columna `generacion`. Si tu MySQL ya tenía esa columna, puede permanecer sin causar problemas: dejamos de utilizarla, sin borrar los datos históricos ni requerir una migración destructiva.
+
+## Actualización automática del listado
+
+- `index.php` reutiliza `includes/listado_publico.php` para servir las tarjetas y la paginación cuando llega `tes_fragmento=1`.
+- `assets/js/filtros.js` actualiza el listado mediante solicitudes GET al cambiar cualquier filtro, conserva el historial del navegador y permite avanzar o retroceder en las páginas sin recarga completa.
+- `assets/js/tarjetas.js` vuelve a calcular cuándo mostrar «Ver más» después de cada actualización.
+- Se aceptan varias etiquetas con `etiquetas[]` y se mantiene compatibilidad con enlaces antiguos `?etiqueta=ID`.
