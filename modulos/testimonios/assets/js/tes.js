@@ -59,6 +59,21 @@
         });
     }
 
+    // Actualiza el contador sin cerrar el desplegable ni perder selecciones.
+    const panelEtiquetas = document.querySelector('.tes-etiquetas-desplegable');
+    if (panelEtiquetas) {
+        const casillas = panelEtiquetas.querySelectorAll('input[name="etiquetas[]"]');
+        const contador = panelEtiquetas.querySelector('.tes-etiquetas-desplegable__contador');
+        const actualizarContador = () => {
+            const cantidad = [...casillas].filter((casilla) => casilla.checked).length;
+            contador.textContent = cantidad === 0
+                ? 'Ninguna seleccionada'
+                : cantidad + (cantidad === 1 ? ' seleccionada' : ' seleccionadas');
+        };
+        casillas.forEach((casilla) => casilla.addEventListener('change', actualizarContador));
+        actualizarContador();
+    }
+
     document.querySelectorAll('form.form-eliminar').forEach((formularioEliminar) => {
         formularioEliminar.addEventListener('submit', (evento) => {
             const id = formularioEliminar.elements.namedItem('id').value;
