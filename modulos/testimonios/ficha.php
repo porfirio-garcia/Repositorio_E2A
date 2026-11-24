@@ -16,7 +16,7 @@ cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css?v=' . fi
 ?>
 
 <section class="contenedor seccion">
-    <a href="index.php">Volver a testimonios</a>
+    <p><a class="boton boton--secundario boton--pequeno" href="index.php"><span aria-hidden="true">←</span> Volver a testimonios</a></p>
     <article class="ancho-lectura tes-ficha">
         <h1><?= e($testimonio['nombre']) ?></h1>
         <p class="leyenda">
