@@ -35,34 +35,65 @@
 .tes-formulario {
     margin-inline: auto;
 }
-/* Selección múltiple de etiquetas públicas. */
+/* Etiquetas en desplegable, organizadas horizontalmente. */
 .tes-campo-etiquetas {
     border: 0;
     padding: 0;
     min-width: 0;
 }
-.tes-campo-etiquetas legend {
-    padding: 0;
+.tes-campo-etiquetas legend { padding: 0; }
+.tes-etiquetas-desplegable {
+    width: 100%;
+    margin-block: .75rem 1.25rem;
+    border: 1px solid var(--marca-700);
+    border-radius: .75rem;
+    background: #fff;
+}
+.tes-etiquetas-desplegable__resumen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: .85rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+.tes-etiquetas-desplegable__resumen:focus-visible {
+    outline: 3px solid var(--marca-700);
+    outline-offset: 2px;
+}
+.tes-etiquetas-desplegable__contador {
+    color: var(--marca-700);
+    font-size: .85rem;
+    font-weight: 500;
+}
+.tes-etiquetas-desplegable__panel {
+    padding: 1rem;
+    border-top: 1px solid #d8deeb;
 }
 .tes-opciones-etiquetas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .6rem;
-    margin-block: .75rem 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: .65rem;
 }
 .tes-opcion-etiqueta-publica {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: .5rem;
-    padding: .55rem .85rem;
-    border: 1px solid var(--marca-700);
+    gap: .55rem;
+    min-width: 0;
+    padding: .65rem .8rem;
+    border: 1px solid #c7d2e3;
     border-radius: .65rem;
     cursor: pointer;
+    overflow-wrap: anywhere;
 }
 .tes-opcion-etiqueta-publica:has(input:checked) {
+    border-color: var(--marca-700);
     background: var(--marca-100, #eaf4ef);
     font-weight: 600;
 }
 .tes-opcion-etiqueta-publica input {
     accent-color: var(--marca-700);
+    flex-shrink: 0;
 }
