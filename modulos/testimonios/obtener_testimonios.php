@@ -37,7 +37,7 @@ function tes_etiquetas_publicas(): array
     )->fetchAll();
 }
 
-function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina, ?int $etiquetaId = null): array
+function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina, array $etiquetasIds = []): array
 {
     $condiciones = ["t.estado = 'aprobado'"];
     $valores = [];
@@ -52,12 +52,15 @@ function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina, ?int
         $valores[] = $tipo;
     }
 
-    if ($etiquetaId !== null) {
-        $condiciones[] = 'EXISTS (
+    // Una o varias etiquetas: mostrar testimonios que coincidan con cualquiera.
+    // EXISTS evita duplicar filas cuando un testimonio tiene varias etiquetas.
+    if ($etiquetasIds) {
+        $marcadores = implode(', ', array_fill(0, count($etiquetasIds), '?'));
+        $condiciones[] = "EXISTS (
             SELECT 1 FROM tes_testimonio_etiqueta te
-            WHERE te.testimonio_id = t.id AND te.etiqueta_id = ?
-        )';
-        $valores[] = $etiquetaId;
+            WHERE te.testimonio_id = t.id AND te.etiqueta_id IN ($marcadores)
+        )";
+        array_push($valores, ...$etiquetasIds);
     }
 
     $donde = implode(' AND ', $condiciones);
