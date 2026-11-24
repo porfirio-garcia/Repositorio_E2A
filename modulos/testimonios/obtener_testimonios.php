@@ -71,7 +71,7 @@ function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina, ?int
     $desde = ($pagina - 1) * $limite;
 
     $consulta = bd()->prepare(
-        "SELECT t.id, t.nombre, t.tipo_persona, t.generacion, c.nombre AS carrera,
+        "SELECT t.id, t.nombre, t.tipo_persona, t.creado_en, c.nombre AS carrera,
                 t.testimonio AS extracto
          FROM tes_testimonios t
          LEFT JOIN carreras c ON c.id = t.carrera_id
@@ -91,7 +91,7 @@ function tes_listar_publicados(?int $carreraId, ?string $tipo, int $pagina, ?int
 function tes_obtener_publicado(int $id): ?array
 {
     $consulta = bd()->prepare(
-        "SELECT t.id, t.nombre, t.tipo_persona, t.generacion, t.testimonio, t.video_publico, c.nombre AS carrera
+        "SELECT t.id, t.nombre, t.tipo_persona, t.creado_en, t.testimonio, t.video_publico, c.nombre AS carrera
          FROM tes_testimonios t
          LEFT JOIN carreras c ON c.id = t.carrera_id
          WHERE t.id = ? AND t.estado = 'aprobado'"
