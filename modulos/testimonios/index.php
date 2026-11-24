@@ -86,7 +86,7 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
         </div>
         <button class="boton boton--secundario" type="submit">Filtrar</button>
         <?php if ($filtrosActivos): ?>
-            <a href="index.php">Limpiar filtros</a>
+            <a class="tes-limpiar-filtros" href="index.php" aria-label="Limpiar filtros" title="Limpiar filtros"><span aria-hidden="true">&times;</span></a>
         <?php endif; ?>
     </form>
 
@@ -97,11 +97,9 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
     <?php else: ?>
         <div class="rejilla">
             <?php foreach ($testimonios as $t): ?>
-                <article class="tarjeta tes-tarjeta">
+                <a class="tarjeta tes-tarjeta" href="ficha.php?id=<?= (int) $t['id'] ?>" aria-label="<?= e('Ver testimonio de ' . $t['nombre']) ?>">
                     <div class="tarjeta__cuerpo">
-                        <h2 class="tarjeta__titulo">
-                            <a href="ficha.php?id=<?= (int) $t['id'] ?>"><?= e($t['nombre']) ?></a>
-                        </h2>
+                        <h2 class="tarjeta__titulo"><?= e($t['nombre']) ?></h2>
                         <p class="leyenda">
                             <?= e(ucfirst($t['tipo_persona'])) ?>
 
@@ -114,23 +112,16 @@ cabecera('Testimonios', '', 'css/listado.css?v=' . filemtime(__DIR__ . '/css/lis
 <?php endif; ?>
                         </p>
                         <p><?= e($t['extracto']) ?><?= $t['tiene_mas'] ? '…' : '' ?></p>
-                        <a href="ficha.php?id=<?= (int) $t['id'] ?>"
-                           aria-label="<?= e(($t['tiene_mas'] ? 'Leer más del testimonio de ' : 'Ver testimonio de ') . $t['nombre']) ?>">
-                            <?= $t['tiene_mas'] ? 'Leer más' : 'Ver testimonio' ?>
-                        </a>
+                        <span class="tes-tarjeta__accion"><?= $t['tiene_mas'] ? 'Leer más' : 'Ver testimonio' ?> <span aria-hidden="true">→</span></span>
                     </div>
                     <?php if (isset($etiquetas[$t['id']])): ?>
                         <div class="tarjeta__pie tes-etiquetas">
                             <?php foreach ($etiquetas[$t['id']] as $tag): ?>
-                                <a class="insignia insignia--info"
-                                   href="<?= e('?' . http_build_query(array_merge($filtrosActivos, ['etiqueta' => (int) $tag['id'], 'pagina' => 1]))) ?>"
-                                   aria-label="<?= e('Filtrar por etiqueta ' . $tag['nombre']) ?>">
-                                    <?= e($tag['nombre']) ?>
-                                </a>
+                                <span class="insignia insignia--info"><?= e($tag['nombre']) ?></span>
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
-                </article>
+                </a>
             <?php endforeach; ?>
         </div>
 
