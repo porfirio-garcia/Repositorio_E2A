@@ -227,7 +227,12 @@ a.tes-tarjeta:focus-visible {
 .tes-tarjeta__extracto {
     -webkit-line-clamp: 2;
     line-clamp: 2;
-    min-height: 0;
+    flex: 0 0 auto;
+    max-height: 2.8em;
+    line-height: 1.4;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 .tes-tarjeta .tes-tarjeta__accion {
     margin-top: auto;
