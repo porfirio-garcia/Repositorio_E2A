@@ -92,10 +92,15 @@
     text-align: center;
 }
 
-/* Deja espacio para llegar al final de la página con la tarjeta flotando. */
+/* Espacio compacto al final. El anuncio continúa fijo sin alargar el documento. */
 #testimonios,
 .tes-ficha {
-    padding-bottom: 12rem;
+    padding-bottom: 1.25rem;
+}
+
+/* Evita margen adicional entre el listado y el pie común. */
+main:has(#testimonios) + .pie {
+    margin-top: 0;
 }
 
 @media (max-width: 640px) {
@@ -112,7 +117,7 @@
 
     #testimonios,
     .tes-ficha {
-        padding-bottom: 9rem;
+        padding-bottom: 1.25rem;
     }
 }
 
@@ -181,18 +186,23 @@ a.tes-tarjeta:focus-visible {
     outline-offset: 2px;
 }
 
-/* Tarjetas uniformes en el listado. El detalle conserva el texto completo. */
+/* Tarjetas compactas, uniformes y todavía totalmente clicables. */
 .tes-tarjeta {
-    height: 20.5rem;
-    min-height: 20.5rem;
-    max-height: 20.5rem;
+    height: 11.5rem;
+    min-height: 11.5rem;
+    max-height: 11.5rem;
 }
 .tes-tarjeta .tarjeta__cuerpo {
     display: flex;
     flex-direction: column;
-    gap: .3rem;
+    gap: .2rem;
     min-height: 0;
     overflow: hidden;
+    padding: .7rem .85rem;
+}
+.tes-tarjeta .tarjeta__cuerpo p,
+.tes-tarjeta .tarjeta__titulo {
+    margin-bottom: 0;
 }
 .tes-tarjeta .tarjeta__titulo,
 .tes-tarjeta__metadatos,
@@ -202,8 +212,8 @@ a.tes-tarjeta:focus-visible {
     overflow: hidden;
 }
 .tes-tarjeta .tarjeta__titulo {
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
     flex-shrink: 0;
 }
 .tes-tarjeta__metadatos {
@@ -212,8 +222,9 @@ a.tes-tarjeta:focus-visible {
     flex-shrink: 0;
 }
 .tes-tarjeta__extracto {
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    min-height: 0;
 }
 .tes-tarjeta .tes-tarjeta__accion {
     margin-top: auto;
@@ -222,7 +233,8 @@ a.tes-tarjeta:focus-visible {
 .tes-tarjeta .tarjeta__pie {
     flex: 0 0 auto;
     flex-wrap: wrap;
-    max-height: 4.5rem;
+    max-height: 2.8rem;
+    padding: .5rem .85rem;
     overflow: hidden;
 }
 
@@ -233,7 +245,7 @@ a.tes-tarjeta:focus-visible {
     align-items: center;
     flex-wrap: wrap;
     gap: .6rem;
-    margin-block: 2rem 1rem;
+    margin-block: 1.25rem .4rem;
 }
 .tes-paginacion__numeros {
     display: flex;
