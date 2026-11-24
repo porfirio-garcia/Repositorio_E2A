@@ -22,7 +22,7 @@ cabecera('Subir testimonio', '', 'css/modulo.css?v=' . filemtime(__DIR__ . '/css
 
 <section class="contenedor seccion">
 
-    <a href="index.php">Volver a testimonios</a>
+    <p><a class="boton boton--secundario boton--pequeno" href="index.php"><span aria-hidden="true">←</span> Volver a testimonios</a></p>
     <h1>Subir testimonio</h1>
 
     <?php pintar_mensajes(); ?>
