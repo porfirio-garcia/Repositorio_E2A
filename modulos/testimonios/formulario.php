@@ -12,6 +12,7 @@ require_once __DIR__ . '/../../nucleo/comun.php';
 $listaCarreras = carreras();
 require_once __DIR__ . '/includes/etiquetas.php';
 $listaEtiquetas = tes_etiquetas_disponibles();
+$aniosDisponibles = range((int) date('Y'), 1990);
 
 // Recuperar datos anteriores si hubo un error.
 $datosFormulario = $_SESSION['tes_formulario'] ?? [];
@@ -160,26 +161,47 @@ cabecera('Subir testimonio', '', 'css/modulo.css?v=' . filemtime(__DIR__ . '/css
             <?php endif; ?>
         </fieldset>
 
-        <!-- GENERACIÓN -->
-        <div class="campo">
-            <label class="campo__etiqueta" for="generacion">
-                Generación
-            </label>
+        <!-- PERIODO DE ESTUDIOS: SOLO SELECTORES DE AÑO -->
+        <?php $tipoPrevio = $datosFormulario['tipo_persona'] ?? ''; ?>
+        <div class="tes-anios" id="tes-anios">
+            <div class="campo">
+                <label class="campo__etiqueta" for="anio_ingreso" id="tes-etiqueta-ingreso">
+                    <?= $tipoPrevio === 'familiar' ? 'Año de ingreso del estudiante (opcional)' : 'Año de ingreso *' ?>
+                </label>
+                <select class="campo__control" id="anio_ingreso" name="anio_ingreso"
+                        <?= in_array($tipoPrevio, ['estudiante', 'egresado'], true) ? 'required' : '' ?>>
+                    <option value="">Selecciona el año</option>
+                    <?php foreach ($aniosDisponibles as $anio): ?>
+                        <option value="<?= $anio ?>"
+                            <?= (string) ($datosFormulario['anio_ingreso'] ?? '') === (string) $anio ? 'selected' : '' ?>>
+                            <?= $anio ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-            <input
-                class="campo__control"
-                type="text"
-                id="generacion"
-                name="generacion"
-                value="<?= e($datosFormulario['generacion'] ?? '') ?>"
-                maxlength="20"
-                placeholder="Ej. 2023-2026"
-            >
-
-            <small class="campo__ayuda">
-                Campo opcional.
-            </small>
+            <div class="campo tes-anio-egreso" id="tes-grupo-egreso"
+                 <?= $tipoPrevio === 'estudiante' ? 'hidden' : '' ?>>
+                <label class="campo__etiqueta" for="anio_egreso" id="tes-etiqueta-egreso">
+                    <?= $tipoPrevio === 'familiar' ? 'Año de egreso del estudiante (opcional)' : 'Año de egreso *' ?>
+                </label>
+                <select class="campo__control" id="anio_egreso" name="anio_egreso"
+                        <?= $tipoPrevio === 'egresado' ? 'required' : '' ?>
+                        <?= $tipoPrevio === 'estudiante' ? 'disabled' : '' ?>>
+                    <option value="">Selecciona el año</option>
+                    <?php foreach ($aniosDisponibles as $anio): ?>
+                        <option value="<?= $anio ?>"
+                            <?= (string) ($datosFormulario['anio_egreso'] ?? '') === (string) $anio ? 'selected' : '' ?>>
+                            <?= $anio ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </div>
+        <p class="campo__ayuda" id="tes-ayuda-anios">
+            Ingreso obligatorio para estudiantes. Ingreso y egreso obligatorios para egresados.
+            Ambos opcionales para familiares.
+        </p>
 
         <!-- TESTIMONIO -->
         <div class="campo">
