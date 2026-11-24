@@ -143,7 +143,7 @@ cabecera('Administrar etiquetas', '', '../css/admin.css');
 ?>
 
 <section class="contenedor seccion">
-    <a href="index.php">Volver a moderación</a>
+    <p><a class="boton boton--secundario boton--pequeno" href="index.php"><span aria-hidden="true">←</span> Volver a moderación</a></p>
     <h1>Administrar etiquetas</h1>
     <?php pintar_mensajes(); ?>
 
