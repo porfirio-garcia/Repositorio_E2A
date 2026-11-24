@@ -47,7 +47,8 @@ Solo los aprobados aparecen en el listado público.
 
 ## Listado y pruebas de paginación
 
-- Se muestran 10 testimonios aprobados por página, en tarjetas de altura uniforme.
+- Se muestran 10 testimonios aprobados por página, en tarjetas compactas de 11.5 rem de altura uniforme; los textos del listado se recortan visualmente, sin modificar el contenido completo de la ficha.
+- Se eliminó el relleno extra del listado y se evita que las páginas con pocos resultados dejen un hueco grande antes del pie.
 - La navegación usa números de página, Anterior y Siguiente y conserva los filtros activos.
 - Los enlaces de regreso en el formulario, la ficha y las vistas administrativas usan botones del estilo común de la plataforma.
 - Para llenar una segunda página de ejemplo, importar una vez desde phpMyAdmin el archivo `modulos/testimonios/datos_prueba_paginacion_10.sql` en una base **local de desarrollo**. Añade 10 testimonios claramente marcados como ficticios y aprobados; no edita los registros anteriores. Reejecutarlo no duplica los ejemplos por nombre.
