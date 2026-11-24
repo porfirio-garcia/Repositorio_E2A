@@ -41,9 +41,34 @@ function tes_error_subida(string $aviso, array $datos): never
         'carrera_id' => mb_substr($datos['carrera_id'], 0, 10),
         'generacion' => mb_substr($datos['generacion'], 0, 20),
         'testimonio' => mb_substr($datos['testimonio'], 0, 3000),
+        'etiquetas' => $datos['etiquetas'] ?? [],
     ];
     mensaje('error', $aviso);
     redirigir('formulario.php');
+}
+
+// Validar los ID de las etiquetas recibidas antes de guardar el testimonio.
+$recibidas = $_POST['etiquetas'] ?? [];
+if (!is_array($recibidas) || count($recibidas) > 100) {
+    tes_error_subida('Selecciona etiquetas válidas.', $datos);
+}
+$etiquetasIds = [];
+foreach ($recibidas as $valor) {
+    $id = is_string($valor) && ctype_digit($valor) ? (int) $valor : 0;
+    if ($id < 1) {
+        tes_error_subida('Selecciona etiquetas válidas.', $datos);
+    }
+    $etiquetasIds[$id] = $id;
+}
+$etiquetasIds = array_values($etiquetasIds);
+$datos['etiquetas'] = $etiquetasIds;
+if ($etiquetasIds) {
+    $marcadores = implode(',', array_fill(0, count($etiquetasIds), '?'));
+    $validarEtiquetas = bd()->prepare("SELECT COUNT(*) FROM tes_etiquetas WHERE id IN ($marcadores)");
+    $validarEtiquetas->execute($etiquetasIds);
+    if ((int) $validarEtiquetas->fetchColumn() !== count($etiquetasIds)) {
+        tes_error_subida('Una etiqueta seleccionada ya no existe. Actualiza el formulario.', $datos);
+    }
 }
 
 $carreraId = entero($datos['carrera_id']);
@@ -63,13 +88,6 @@ if ($datos['tipo_persona'] !== 'familiar' && $carreraId === null) {
 }
 if ($datos['tipo_persona'] === 'familiar' && $datos['carrera_id'] === '') {
     $carreraId = null;
-}
-$tiposPermitidos = ['estudiante', 'egresado', 'familiar'];
-if (!in_array($datos['tipo_persona'], $tiposPermitidos, true)) {
-tes_error_subida(
-    'PHP recibió el tipo de persona: ' . $datos['tipo_persona'],
-    $datos
-);
 }
 if ($longitud < 20 || $longitud > 3000) {
     tes_error_subida('Escribe un testimonio de 20 a 3000 caracteres.', $datos);
@@ -127,9 +145,11 @@ function tes_guardar_video(array $video): ?string
 }
 
 $archivo = null;
+$conexion = bd();
 try {
     $archivo = tes_guardar_video($_FILES['video'] ?? ['error' => UPLOAD_ERR_NO_FILE]);
-    $consulta = bd()->prepare(
+    $conexion->beginTransaction();
+    $consulta = $conexion->prepare(
         "INSERT INTO tes_testimonios
          (nombre, tipo_persona, carrera_id, generacion, testimonio, video_archivo, video_publico, estado)
          VALUES (?, ?, ?, ?, ?, ?, ?, 'pendiente')"
@@ -143,9 +163,26 @@ try {
         $archivo,
         $archivo !== null && ($_POST['consentimiento_video'] ?? null) === '1' ? 1 : 0,
     ]);
+
+    $testimonioId = (int) $conexion->lastInsertId();
+    if ($etiquetasIds) {
+        $asociar = $conexion->prepare(
+            'INSERT INTO tes_testimonio_etiqueta (testimonio_id, etiqueta_id) VALUES (?, ?)'
+        );
+        foreach ($etiquetasIds as $idEtiqueta) {
+            $asociar->execute([$testimonioId, $idEtiqueta]);
+        }
+    }
+    $conexion->commit();
 } catch (InvalidArgumentException $error) {
+    if ($conexion->inTransaction()) {
+        $conexion->rollBack();
+    }
     tes_error_subida($error->getMessage(), $datos);
 } catch (Throwable $error) {
+    if ($conexion->inTransaction()) {
+        $conexion->rollBack();
+    }
     if ($archivo !== null && !unlink(__DIR__ . '/video/' . $archivo)) {
         error_log('TES: No se pudo retirar un video después de un error al guardar el testimonio.');
     }
