@@ -98,9 +98,10 @@
     padding-bottom: 1.25rem;
 }
 
-/* En páginas con pocos resultados, no estirar main hasta llenar la pantalla. */
+/* Mantener el pie al fondo cuando los filtros dejan pocos o ningún resultado.
+   La base ya usa body flex y main flexible; no impedir que main crezca. */
 main:has(#testimonios) {
-    flex: 0 0 auto;
+    flex: 1 0 auto;
 }
 main:has(#testimonios) + .pie {
     margin-top: 0;
