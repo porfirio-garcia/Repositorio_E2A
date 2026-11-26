@@ -1,0 +1,92 @@
+.tes-filtro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.tes-filtro label {
+    margin: 0;
+}
+
+.tes-filtro select {
+    width: auto;
+    max-width: 100%;
+}
+
+.tes-tabla td {
+    vertical-align: top;
+}
+
+.tes-texto {
+    overflow-wrap: anywhere;
+}
+
+.tes-video {
+    display: block;
+    margin-top: .5rem;
+}
+
+.tes-acciones input {
+    margin-block: .25rem .5rem;
+}
+
+.tes-etiqueta {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    .tes-tabla, .tes-tabla tbody, .tes-tabla tr, .tes-tabla td {
+        display: block;
+    }
+
+    .tes-tabla {
+        min-width: 0;
+    }
+
+    .tes-tabla thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+    }
+
+    .tes-tabla td {
+        padding: .5rem .75rem;
+        overflow-wrap: anywhere;
+    }
+
+    .tes-tabla .tes-acciones {
+        padding-bottom: 1rem;
+    }
+
+    .tes-etiqueta {
+        display: block;
+        font-weight: 600;
+    }
+}
+
+.tes-opcion-etiqueta,
+.tes-editar-enlace {
+    display: block;
+    margin-block: var(--e2);
+}
+
+.tes-editar-etiqueta,
+.tes-renombrar-etiqueta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--e2);
+}
+
+.tes-editar-etiqueta {
+    margin-block: var(--e3);
+}
+
+.tes-renombrar-etiqueta .campo__control {
+    width: auto;
+    max-width: 100%;
+}
