@@ -1,24 +1,42 @@
 # Moderación de testimonios
 
-1. Entra como **Coordinación** y abre **Panel → Testimonios**. También puedes abrir `modulos/testimonios/admin/index.php` desde la dirección local del proyecto.
-2. Filtra por **Pendiente**, **Publicado**, **Rechazado** o **Todos**. Revisa el texto y, si se adjuntó un video, descárgalo desde la bandeja.
-3. Pulsa **Publicar** para guardar el estado `aprobado`, o escribe un motivo y pulsa **Rechazar**. El motivo debe tener de 1 a 300 caracteres. Solo se pueden moderar testimonios pendientes.
-4. Abre **Administrar etiquetas** para gestionar el catálogo. En cada testimonio, usa **Editar etiquetas** para asignar una o varias.
-5. **Eliminar** pide confirmación y debe usarse con datos de prueba durante la demostración. El borrado quita el registro y el esquema elimina su historial y sus asignaciones de etiquetas. El archivo de video permanece en el almacenamiento.
+1. Entra como **Coordinación** y abre **Panel → Testimonios** o la ruta `modulos/testimonios/admin/index.php`.
+2. Elige **Enviado** en el filtro y pulsa **Iniciar revisión**. El testimonio cambia a **En revisión** y sigue fuera del listado público.
+3. Revisa el texto y, si se adjuntó un video, descárgalo desde la bandeja. Pulsa **Publicar** o escribe un motivo de 1 a 300 caracteres y pulsa **Rechazar**.
+4. Para consultar una decisión, filtra por **Publicado** o **Rechazado**. El motivo de rechazo se muestra en la bandeja de Coordinación. Desde aquí también puedes gestionar etiquetas y acceder a la acción de borrado.
 
-## Instalación para pruebas
+## Instalación y cuentas locales
 
-En una base de prueba limpia, importa `sql/01-nucleo.sql` y luego `modulos/testimonios/esquema.sql`. Genera los ejemplos desde el formulario y modéralos desde Coordinación; los archivos de carga masiva ficticia se retiraron del repositorio. Si ya tienes instalada una versión anterior, revisa las migraciones y realiza un respaldo antes de modificar las tablas.
+- En una base nueva, importa `sql/01-nucleo.sql` y después `modulos/testimonios/esquema.sql`.
+- Si la base ya contiene `tes_historial`, haz un respaldo y ejecuta `modulos/testimonios/migracion_moderacion.sql` una sola vez **antes** de importar el esquema nuevo. La migración conserva las decisiones al renombrar la tabla a `tes_moderacion` y agrega `en_revision`. Los testimonios ya publicados o rechazados conservan su estado.
+- Genera las cuentas ficticias en modo desarrollo con la herramienta del núcleo `herramientas/crear-usuarios.php`. Usa la cuenta de Coordinación para moderar y la de Editor para verificar que la bandeja está restringida. Para crear testimonios, abre el formulario público.
 
 ## Cómo funciona
 
-- `admin/index.php` consulta los testimonios y sus carreras, muestra el filtro y envía la acción por POST.
-- `admin/actualizar_estado.php` verifica el rol y el token, comprueba los datos y cambia solo un testimonio pendiente. Guarda el estado y el historial en una sola transacción.
-- `admin/eliminar_testimonio.php` conecta la acción de borrado de Emmanuel con la bandeja.
-- `css/admin.css` muestra una tabla en escritorio y acomoda los campos en vertical en pantallas estrechas.
+| Estado en la bandeja | Valor en SQL | Acciones de moderación |
+|---|---|---|
+| Enviado | `pendiente` | Iniciar revisión |
+| En revisión | `en_revision` | Publicar o rechazar |
+| Publicado | `aprobado` | Estado final |
+| Rechazado | `rechazado` | Estado final |
 
-## Prueba de integración del 19 de noviembre de 2026
+`admin/actualizar_estado.php` valida el rol, el método POST y el token. Para cambiar el estado, el testimonio debe seguir en el estado anterior que corresponde a la acción. La decisión y su entrada en `tes_moderacion` se guardan en la misma transacción. La bandeja consulta el motivo desde ese historial. Se conservan los valores `pendiente` y `aprobado` para que el formulario y el listado público sigan usando el mismo criterio.
 
-Con una base MariaDB limpia y datos ficticios se comprobó el envío con video, el filtro de pendientes, la descarga del video por Coordinación, el rechazo sin motivo, el historial de decisiones y la actualización del listado público después de aprobar, rechazar o eliminar. En Chrome a 375 px se verificaron el ancho de la bandeja, la validación del formulario y la cancelación del borrado.
+La incorporación de la etapa de revisión, la migración y las comprobaciones de moderación se prepararon con asistencia de IA.
 
-Para repetir la prueba en XAMPP, crea dos testimonios ficticios desde el formulario. Aprueba uno, rechaza el otro con motivo y revisa `tes_historial`. El listado público debe mostrar solo el aprobado. Elimínalo al final y vuelve a cargar el listado.
+## Pruebas ejecutadas el 25 de noviembre de 2026
+
+Se usaron PHP 8.4, MariaDB 11.8, Chromium y datos ficticios.
+
+| Comprobación | Resultado |
+|---|---|
+| Entrar con Coordinación, Editor y sin sesión | Coordinación puede moderar. El Editor recibe 403. Sin sesión se redirige al inicio de sesión. |
+| Enviar desde el formulario e iniciar revisión | El envío aparece como Enviado. Al iniciar revisión pasa a En revisión y aparece al filtrar por ese estado. |
+| Cambiar estado sin POST, con token incorrecto, fuera de orden o repetir una decisión | El estado y el historial se conservan. |
+| Rechazar con motivo vacío, solo espacios o más de 300 caracteres | El testimonio permanece En revisión. Un motivo de 300 caracteres se guarda y se muestra en la bandeja. |
+| Publicar y consultar el listado y la ficha | Solo el publicado aparece en el listado y tiene ficha pública. |
+| Simular un fallo al escribir el historial | Se revierte el cambio de estado y se informa del fallo en el panel. |
+| Migrar una instalación anterior con una decisión registrada | El testimonio, su estado y su motivo se conservan. |
+| Abrir la bandeja a 375 px de ancho | La página y la tabla caben sin desplazamiento horizontal. Se pudo iniciar revisión y el navegador bloqueó un rechazo vacío. |
+
+La prueba de integración del 19 de noviembre registró además el envío con video, su descarga por Coordinación y la cancelación del borrado.
