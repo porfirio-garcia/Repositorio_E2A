@@ -14,7 +14,18 @@ if (!is_string($filtro) || !isset($estados[$filtro])) {
     $filtro = '';
 }
 
-$consulta = bd()->prepare(
+$conexion = bd();
+$porPagina = 30;
+$conteo = $conexion->prepare("SELECT COUNT(*) FROM tes_testimonios WHERE (? = '' OR estado = ?)");
+$conteo->execute([$filtro, $filtro]);
+$total = (int) $conteo->fetchColumn();
+$conteo->closeCursor();
+$paginas = max(1, (int) ceil($total / $porPagina));
+$paginaSolicitada = filter_input(INPUT_GET, 'pagina', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 1;
+$pagina = min($paginaSolicitada, $paginas);
+$offset = ($pagina - 1) * $porPagina;
+
+$consulta = $conexion->prepare(
     "SELECT t.id, t.nombre, t.testimonio, t.estado, t.video_archivo, c.nombre AS carrera,
             (SELECT m.motivo FROM tes_moderacion AS m
              WHERE t.estado = 'rechazado' AND m.testimonio_id = t.id
@@ -23,11 +34,17 @@ $consulta = bd()->prepare(
      FROM tes_testimonios AS t
      LEFT JOIN carreras AS c ON c.id = t.carrera_id
      WHERE (? = '' OR t.estado = ?)
-     ORDER BY t.creado_en DESC, t.id DESC"
+     ORDER BY t.creado_en DESC, t.id DESC
+     LIMIT ? OFFSET ?"
 );
-$consulta->execute([$filtro, $filtro]);
+$consulta->bindValue(1, $filtro);
+$consulta->bindValue(2, $filtro);
+$consulta->bindValue(3, $porPagina, PDO::PARAM_INT);
+$consulta->bindValue(4, $offset, PDO::PARAM_INT);
+$consulta->execute();
 $testimonios = $consulta->fetchAll();
 $etiquetas = tes_etiquetas_por_testimonio(array_column($testimonios, 'id'));
+$parametros = $filtro === '' ? [] : ['estado' => $filtro];
 
 cabecera('Panel de Moderación', '', '../css/admin.css');
 ?>
@@ -130,6 +147,19 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
                 </tbody>
             </table>
         </div>
+        <nav aria-label="Páginas de moderación">
+            <ul class="paginacion">
+                <?php for ($numero = 1; $numero <= $paginas; $numero++): ?>
+                    <li>
+                        <?php if ($numero === $pagina): ?>
+                            <span aria-current="page"><?= $numero ?></span>
+                        <?php else: ?>
+                            <a href="?<?= e(http_build_query($parametros + ['pagina' => $numero])) ?>"><?= $numero ?></a>
+                        <?php endif; ?>
+                    </li>
+                <?php endfor; ?>
+            </ul>
+        </nav>
     <?php endif; ?>
 </section>
 
