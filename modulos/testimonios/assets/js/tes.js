@@ -46,20 +46,21 @@
         });
     }
 
-    // Actualiza el contador sin cerrar el desplegable ni perder selecciones.
-    const panelEtiquetas = document.querySelector('.tes-etiquetas-desplegable');
-    if (panelEtiquetas) {
-        const casillas = panelEtiquetas.querySelectorAll('input[name="etiquetas[]"]');
-        const contador = panelEtiquetas.querySelector('.tes-etiquetas-desplegable__contador');
-        const actualizarContador = () => {
-            const cantidad = [...casillas].filter((casilla) => casilla.checked).length;
-            contador.textContent = cantidad === 0
-                ? 'Ninguna seleccionada'
-                : cantidad + (cantidad === 1 ? ' seleccionada' : ' seleccionadas');
+    document.querySelectorAll('[data-limite-etiquetas]').forEach((grupo) => {
+        const limite = Number(grupo.dataset.limiteEtiquetas);
+        const casillas = [...grupo.querySelectorAll('input[name="etiquetas[]"]')];
+        const contador = grupo.querySelector('[data-contador-etiquetas]');
+        const actualizarSeleccion = () => {
+            const cantidad = casillas.filter((casilla) => casilla.checked).length;
+            casillas.forEach((casilla) => {
+                casilla.disabled = !casilla.checked && cantidad >= limite;
+            });
+            const avisoLimite = cantidad > limite ? '. Desmarca las que sobran antes de guardar.' : '';
+            contador.textContent = `${cantidad} de ${limite} seleccionadas${avisoLimite}`;
         };
-        casillas.forEach((casilla) => casilla.addEventListener('change', actualizarContador));
-        actualizarContador();
-    }
+        casillas.forEach((casilla) => casilla.addEventListener('change', actualizarSeleccion));
+        actualizarSeleccion();
+    });
 
     document.querySelectorAll('form.form-eliminar').forEach((formularioEliminar) => {
         formularioEliminar.addEventListener('submit', (evento) => {

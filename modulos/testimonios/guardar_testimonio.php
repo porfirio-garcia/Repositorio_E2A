@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../nucleo/comun.php';
+require_once __DIR__ . '/includes/etiquetas.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     redirigir('formulario.php');
@@ -46,20 +47,11 @@ function tes_error_subida(string $aviso, array $datos): never
     redirigir('formulario.php');
 }
 
-// Validar los ID de las etiquetas recibidas antes de guardar el testimonio.
-$recibidas = $_POST['etiquetas'] ?? [];
-if (!is_array($recibidas) || count($recibidas) > 100) {
-    tes_error_subida('Selecciona etiquetas válidas.', $datos);
+try {
+    $etiquetasIds = tes_validar_etiquetas($_POST['etiquetas'] ?? []);
+} catch (InvalidArgumentException $error) {
+    tes_error_subida($error->getMessage(), $datos);
 }
-$etiquetasIds = [];
-foreach ($recibidas as $valor) {
-    $id = is_string($valor) && ctype_digit($valor) ? (int) $valor : 0;
-    if ($id < 1) {
-        tes_error_subida('Selecciona etiquetas válidas.', $datos);
-    }
-    $etiquetasIds[$id] = $id;
-}
-$etiquetasIds = array_values($etiquetasIds);
 $datos['etiquetas'] = $etiquetasIds;
 if ($etiquetasIds) {
     $marcadores = implode(',', array_fill(0, count($etiquetasIds), '?'));

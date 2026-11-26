@@ -9,7 +9,7 @@
 ## Flujo
 
 - Abre `modulos/testimonios/` y selecciona **Subir testimonio**. El formulario es público. Pide nombre, tipo de persona, carrera, texto y autorización de publicación. Ya no se solicita generación ni años de estudio; la fecha de creación se registra automáticamente en MySQL. El video es opcional.
-- Coordinación entra a `modulos/testimonios/admin/`, inicia la revisión y después publica o rechaza con motivo. Consulta [la guía de moderación](MODERACION.md) para el flujo y las pruebas. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** en cada testimonio se pueden asignar varias. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
+- Coordinación entra a `modulos/testimonios/admin/`, inicia la revisión y después publica o rechaza con motivo. Consulta [la guía de moderación](MODERACION.md) para el flujo y las pruebas. En **Administrar etiquetas** se pueden crear, renombrar y eliminar etiquetas. Desde **Editar etiquetas** se pueden asignar hasta tres por testimonio. Si un testimonio anterior tiene más de tres, desmarca las que sobran antes de guardar. Al eliminar una etiqueta se retira de todos los testimonios donde se usaba.
 - El listado público muestra los testimonios publicados de treinta en treinta. Permite combinar filtros por carrera, tipo de persona y una etiqueta creada por Coordinación; las etiquetas de las tarjetas son informativas y solo el selector de filtros cambia la etiqueta activa. Las tarjetas muestran hasta **40 palabras o 180 caracteres**, con **4 líneas** visibles, con altura uniforme. El indicador **Ver más** aparece cuando el texto se recorta por palabras o líneas; toda la tarjeta sigue siendo clicable, incluso si el texto es corto. El testimonio completo se conserva en la ficha. El detalle solo está disponible para testimonios publicados. Los videos se consultan en el panel de moderación. El detalle público reproduce videos únicamente cuando el testimonio está aprobado y existe autorización expresa para publicar el video.
 ## Tipos de persona
 
@@ -36,9 +36,9 @@ Solo los aprobados aparecen en el listado público.
 ## Etiquetas en el formulario público
 
 - Coordinación crea, renombra y elimina etiquetas desde `admin/etiquetas.php`.
-- El formulario público muestra un desplegable que contiene las etiquetas creadas por Coordinación, distribuidas en columnas adaptables. Se puede seleccionar ninguna, una o varias mediante casillas y un contador muestra cuántas se han elegido.
+- El formulario público muestra las etiquetas creadas por Coordinación en un desplegable. Se pueden seleccionar de cero a tres y un contador indica cuántas se han elegido.
 - Al enviar el testimonio, PHP verifica que las etiquetas existan y guarda tanto el testimonio pendiente como sus relaciones en una transacción.
-- Si una validación falla, el formulario recupera las etiquetas seleccionadas.
+- Si falla otro campo del formulario, se recupera la selección de etiquetas siempre que esté dentro del límite.
 - Los testimonios solo aparecen públicamente si están aprobados. Carrera, tipo de persona y varias etiquetas se combinan automáticamente sin pulsar «Filtrar» y sin recargar toda la página. Las etiquetas coinciden por cualquiera de las seleccionadas; la paginación conserva los filtros activos.
 - No se requieren nuevas tablas: se reutilizan `tes_etiquetas` y `tes_testimonio_etiqueta`.
 

@@ -131,17 +131,17 @@ cabecera('Subir testimonio', '', 'css/modulo.css?v=' . filemtime(__DIR__ . '/css
         <!-- ETIQUETAS DEFINIDAS POR COORDINACIÓN -->
         <fieldset class="campo tes-campo-etiquetas">
             <legend class="campo__etiqueta">Etiquetas (opcional)</legend>
-            <p class="campo__ayuda">Puedes elegir varias etiquetas para describir tu experiencia.</p>
+            <p class="campo__ayuda">Puedes elegir hasta <?= TES_MAX_ETIQUETAS ?> etiquetas.</p>
 
             <?php if (!$listaEtiquetas): ?>
                 <p class="campo__ayuda">Todavía no hay etiquetas disponibles.</p>
             <?php else: ?>
-                <details class="tes-etiquetas-desplegable" <?= !empty($datosFormulario['etiquetas']) ? 'open' : '' ?>>
+                <details class="tes-etiquetas-desplegable" data-limite-etiquetas="<?= TES_MAX_ETIQUETAS ?>"
+                         <?= !empty($datosFormulario['etiquetas']) ? 'open' : '' ?>>
                     <summary class="tes-etiquetas-desplegable__resumen">
                         <span>Seleccionar etiquetas</span>
-                        <span class="tes-etiquetas-desplegable__contador" aria-live="polite">
-                            <?php $cantidadElegidas = count($datosFormulario['etiquetas'] ?? []); ?>
-                            <?= $cantidadElegidas ? $cantidadElegidas . ' seleccionada' . ($cantidadElegidas === 1 ? '' : 's') : 'Ninguna seleccionada' ?>
+                        <span class="tes-etiquetas-desplegable__contador" data-contador-etiquetas aria-live="polite">
+                            <?= count($datosFormulario['etiquetas'] ?? []) ?> de <?= TES_MAX_ETIQUETAS ?> seleccionadas
                         </span>
                     </summary>
                     <div class="tes-etiquetas-desplegable__panel">
