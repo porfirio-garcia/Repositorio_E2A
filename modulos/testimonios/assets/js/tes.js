@@ -9,26 +9,17 @@
                 if ([...valor].length > 100) return 'El nombre admite hasta 100 caracteres.';
                 return '';
             },
-            tipo_persona: (valor) => {
-                return ['estudiante', 'egresado'].includes(valor)
-                    ? ''
-                    : 'Selecciona estudiante o egresado.';
-            },
-            carrera: (valor) => {
-                if (!valor) return 'Indica tu carrera.';
-                if ([...valor].length > 100) return 'La carrera admite hasta 100 caracteres.';
-                return '';
-            },
-            generacion: (valor) => {
-                return [...valor].length > 20
-                    ? 'La generación admite hasta 20 caracteres.'
-                    : '';
+            tipo_persona: (valor) =>
+                ['estudiante', 'egresado', 'familiar'].includes(valor)
+                    ? '' : 'Selecciona estudiante, egresado o familiar.',
+            carrera_id: (valor) => {
+                const tipo = formulario.elements.namedItem('tipo_persona').value;
+                return tipo !== 'familiar' && !valor ? 'Selecciona tu carrera.' : '';
             },
             testimonio: (valor) => {
                 const longitud = [...valor].length;
                 return longitud >= 20 && longitud <= 3000
-                    ? ''
-                    : 'Escribe un testimonio de 20 a 3000 caracteres.';
+                    ? '' : 'Escribe un testimonio de 20 a 3000 caracteres.';
             },
         };
 
@@ -53,6 +44,21 @@
                 evento.preventDefault();
             }
         });
+    }
+
+    // Actualiza el contador sin cerrar el desplegable ni perder selecciones.
+    const panelEtiquetas = document.querySelector('.tes-etiquetas-desplegable');
+    if (panelEtiquetas) {
+        const casillas = panelEtiquetas.querySelectorAll('input[name="etiquetas[]"]');
+        const contador = panelEtiquetas.querySelector('.tes-etiquetas-desplegable__contador');
+        const actualizarContador = () => {
+            const cantidad = [...casillas].filter((casilla) => casilla.checked).length;
+            contador.textContent = cantidad === 0
+                ? 'Ninguna seleccionada'
+                : cantidad + (cantidad === 1 ? ' seleccionada' : ' seleccionadas');
+        };
+        casillas.forEach((casilla) => casilla.addEventListener('change', actualizarContador));
+        actualizarContador();
     }
 
     document.querySelectorAll('form.form-eliminar').forEach((formularioEliminar) => {
