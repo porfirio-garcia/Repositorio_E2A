@@ -3,18 +3,27 @@ require_once __DIR__ . '/../../../nucleo/comun.php';
 requerir_rol('coordinacion');
 require_once __DIR__ . '/../includes/etiquetas.php';
 
-$estados = ['pendiente' => 'Pendiente', 'aprobado' => 'Publicado', 'rechazado' => 'Rechazado'];
+$estados = [
+    'pendiente' => 'Enviado',
+    'en_revision' => 'En revisión',
+    'aprobado' => 'Publicado',
+    'rechazado' => 'Rechazado',
+];
 $filtro = $_GET['estado'] ?? '';
 if (!is_string($filtro) || !isset($estados[$filtro])) {
     $filtro = '';
 }
 
 $consulta = bd()->prepare(
-    'SELECT t.id, t.nombre, t.testimonio, t.estado, t.video_archivo, c.nombre AS carrera
+    "SELECT t.id, t.nombre, t.testimonio, t.estado, t.video_archivo, c.nombre AS carrera,
+            (SELECT m.motivo FROM tes_moderacion AS m
+             WHERE t.estado = 'rechazado' AND m.testimonio_id = t.id
+               AND m.estado_nuevo = 'rechazado'
+             ORDER BY m.id DESC LIMIT 1) AS motivo
      FROM tes_testimonios AS t
      LEFT JOIN carreras AS c ON c.id = t.carrera_id
-     WHERE (? = \'\' OR t.estado = ?)
-     ORDER BY t.creado_en DESC, t.id DESC'
+     WHERE (? = '' OR t.estado = ?)
+     ORDER BY t.creado_en DESC, t.id DESC"
 );
 $consulta->execute([$filtro, $filtro]);
 $testimonios = $consulta->fetchAll();
@@ -68,9 +77,12 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
                                     <a class="tes-video" href="video.php?id=<?= (int) $t['id'] ?>">Descargar video</a>
                                 <?php endif; ?>
                             </td>
-                            <td role="cell">
+                            <td role="cell" class="tes-texto">
                                 <span class="tes-etiqueta" aria-hidden="true">Estado</span>
                                 <span class="insignia"><?= e($estados[$t['estado']] ?? $t['estado']) ?></span>
+                                <?php if ($t['motivo'] !== null): ?>
+                                    <p class="tes-motivo"><strong>Motivo:</strong> <?= e($t['motivo']) ?></p>
+                                <?php endif; ?>
                             </td>
                             <td role="cell">
                                 <span class="tes-etiqueta" aria-hidden="true">Etiquetas</span>
@@ -84,6 +96,13 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
                             <td role="cell" class="tes-acciones">
                                 <span class="tes-etiqueta" aria-hidden="true">Acciones</span>
                                 <?php if ($t['estado'] === 'pendiente'): ?>
+                                    <form method="POST" action="actualizar_estado.php">
+                                        <?= campo_token() ?>
+                                        <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
+                                        <button class="boton boton--primario boton--pequeno"
+                                                type="submit" name="accion" value="revisar">Iniciar revisión</button>
+                                    </form>
+                                <?php elseif ($t['estado'] === 'en_revision'): ?>
                                     <form method="POST" action="actualizar_estado.php">
                                         <?= campo_token() ?>
                                         <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
