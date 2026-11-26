@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../nucleo/comun.php';
+require_once __DIR__ . '/includes/video.php';
 require_once __DIR__ . '/includes/etiquetas.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
@@ -122,12 +123,12 @@ function tes_guardar_video(array $video): ?string
     }
 
     $mime = (new finfo(FILEINFO_MIME_TYPE))->file($video['tmp_name']);
-    $extensiones = ['video/mp4' => 'mp4', 'video/webm' => 'webm'];
-    if (!isset($extensiones[$mime])) {
-        throw new InvalidArgumentException('Sube un video en formato MP4 o WebM.');
+    $extension = tes_extension_video($mime);
+    if ($extension === null) {
+        throw new InvalidArgumentException('Puedes subir videos en ' . TES_FORMATOS_VIDEO_TEXTO . '.');
     }
 
-    $archivo = bin2hex(random_bytes(16)) . '.' . $extensiones[$mime];
+    $archivo = bin2hex(random_bytes(16)) . '.' . $extension;
     if (!move_uploaded_file($video['tmp_name'], __DIR__ . '/video/' . $archivo)) {
         throw new RuntimeException('No fue posible guardar el video.');
     }

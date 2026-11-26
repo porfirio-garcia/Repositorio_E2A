@@ -30,7 +30,7 @@ Solo los aprobados aparecen en el listado público.
 - En instalaciones existentes, ejecutar una sola vez `modulos/testimonios/migracion_video_publico.sql` desde phpMyAdmin antes de usar el nuevo formulario o el reproductor.
 - El campo `video_publico` inicia en `0`: **los videos anteriores siguen siendo privados** hasta obtener el permiso de su autor. No habilitar videos antiguos sin autorización.
 - Al enviar un nuevo testimonio con video, el autor puede autorizar su publicación mediante una casilla independiente. Un video autorizado solo aparece en `ficha.php` cuando Coordinación publica el testimonio.
-- El reproductor utiliza `video_publico.php`, que verifica estado y autorización y entrega el archivo en modo de reproducción con soporte HTTP Range. La carpeta `video/` continúa bloqueada al acceso directo.
+- El formulario admite MP4, WebM, MOV, AVI y MKV de hasta 35 MB. `video_publico.php` verifica el estado y la autorización antes de permitir la reproducción o descarga. Si el navegador no reproduce el formato, la ficha permite descargar el video. La carpeta `video/` continúa bloqueada al acceso directo.
 
 
 ## Etiquetas en el formulario público

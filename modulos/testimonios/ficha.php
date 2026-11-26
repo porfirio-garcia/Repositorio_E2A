@@ -38,6 +38,7 @@ cabecera('Testimonio de ' . $testimonio['nombre'], '', 'css/listado.css?v=' . fi
                     <source src="video_publico.php?id=<?= (int) $testimonio['id'] ?>">
                     Tu navegador no admite la reproducción de este video.
                 </video>
+                <p><a href="video_publico.php?id=<?= (int) $testimonio['id'] ?>&amp;descargar=1">Descargar video</a></p>
             </section>
         <?php endif; ?>
         <?php if ($etiquetas): ?>

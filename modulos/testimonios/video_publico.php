@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../nucleo/comun.php';
+require_once __DIR__ . '/includes/video.php';
 
 // El archivo físico permanece protegido: únicamente se entrega con
 // consentimiento expreso y si el testimonio fue publicado.
@@ -23,7 +24,8 @@ $consulta = bd()->prepare(
 $consulta->execute([$id]);
 $archivo = $consulta->fetchColumn();
 
-if (!is_string($archivo) || !preg_match('/\\A[a-f0-9]{32}\\.(?:mp4|webm)\\z/D', $archivo)) {
+$mime = tes_mime_video_guardado($archivo);
+if ($mime === null) {
     no_encontrado('Video no disponible.');
 }
 
@@ -68,8 +70,9 @@ if ($rango !== '') {
 }
 
 $extension = pathinfo($archivo, PATHINFO_EXTENSION);
-header('Content-Type: ' . ($extension === 'webm' ? 'video/webm' : 'video/mp4'));
-header('Content-Disposition: inline; filename="testimonio.' . $extension . '"');
+$disposicion = ($_GET['descargar'] ?? null) === '1' ? 'attachment' : 'inline';
+header('Content-Type: ' . $mime);
+header('Content-Disposition: ' . $disposicion . '; filename="testimonio.' . $extension . '"');
 header('Content-Length: ' . ($fin - $inicio + 1));
 header('Accept-Ranges: bytes');
 header('X-Content-Type-Options: nosniff');

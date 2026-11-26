@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 
 require_once __DIR__ . '/../../nucleo/comun.php';
+require_once __DIR__ . '/includes/video.php';
 
 // Obtener carreras desde el núcleo.
 $listaCarreras = carreras();
@@ -191,11 +192,11 @@ cabecera('Subir testimonio', '', 'css/modulo.css?v=' . filemtime(__DIR__ . '/css
                 type="file"
                 id="video"
                 name="video"
-                accept=".mp4,.webm,video/mp4,video/webm"
+                accept="<?= e('.' . implode(',.', array_keys(TES_FORMATOS_VIDEO))) ?>"
             >
 
             <small class="campo__ayuda">
-                Formatos permitidos: MP4 y WebM.
+                Puedes subir videos en <?= e(TES_FORMATOS_VIDEO_TEXTO) ?>.
                 Tamaño máximo: 35 MB.
             </small>
         </div>
