@@ -1,0 +1,445 @@
+.tes-encabezado,
+.tes-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e4);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tes-filtros {
+    align-items: end;
+    justify-content: flex-start;
+    margin-block: var(--e5);
+}
+
+.tes-filtros .campo {
+    flex: 0 1 14rem;
+    margin: 0;
+}
+
+.tes-tarjeta,
+.tes-texto-completo {
+    overflow-wrap: anywhere;
+}
+
+.tes-etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--e2);
+}
+
+.tes-etiquetas a {
+    text-decoration: none;
+}
+
+.tes-etiquetas a:hover {
+    text-decoration: underline;
+}
+
+.tes-ficha {
+    margin-block-start: var(--e5);
+}
+
+.tes-texto-completo {
+    white-space: pre-wrap;
+}
+
+/* Invitación fija: acompaña la lectura sin tapar los controles del sitio. */
+.tes-cta-flotante {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 30;
+    box-sizing: border-box;
+    width: min(19rem, calc(100vw - 3rem));
+    padding: 1.25rem;
+    border: 1px solid var(--marca-700);
+    border-radius: 1rem;
+    background: var(--marca-100, #eaf4ef);
+    color: #17382c;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+}
+
+.tes-cta-flotante__etiqueta {
+    display: block;
+    margin-bottom: .35rem;
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .09em;
+}
+
+.tes-cta-flotante__titulo {
+    display: block;
+    font-size: 1.15rem;
+    line-height: 1.3;
+}
+
+.tes-cta-flotante__texto {
+    margin: .5rem 0 .85rem;
+    font-size: .9rem;
+    line-height: 1.4;
+}
+
+.tes-cta-flotante__boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Espacio compacto al final. El anuncio continúa fijo sin alargar el documento. */
+#testimonios,
+.tes-ficha {
+    padding-bottom: 1.25rem;
+}
+
+/* Mantener el pie al fondo cuando los filtros dejan pocos o ningún resultado.
+   La base ya usa body flex y main flexible; no impedir que main crezca. */
+main:has(#testimonios) {
+    flex: 1 0 auto;
+}
+main:has(#testimonios) + .pie {
+    margin-top: 0;
+}
+
+@media (max-width: 640px) {
+    .tes-cta-flotante {
+        right: .75rem;
+        bottom: .75rem;
+        width: min(17rem, calc(100vw - 1.5rem));
+        padding: .8rem 1rem;
+    }
+
+    .tes-cta-flotante__titulo { font-size: 1rem; }
+    .tes-cta-flotante__texto { display: none; }
+    .tes-cta-flotante__boton { margin-top: .65rem; }
+
+    #testimonios,
+    .tes-ficha {
+        padding-bottom: 1.25rem;
+    }
+}
+
+/* Reproductor para videos autorizados de testimonios publicados. */
+.tes-video-publico { margin-block: 1.5rem 2rem; }
+.tes-video-publico h2 { margin-bottom: .75rem; font-size: 1.15rem; }
+.tes-video-publico video { display: block; width: 100%; max-height: 34rem; background: #101827; border-radius: .85rem; }
+
+/* Toda la tarjeta es un enlace, incluidas las etiquetas solo informativas. */
+a.tes-tarjeta {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+a.tes-tarjeta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(12, 34, 73, .12);
+    border-color: var(--marca-700);
+}
+a.tes-tarjeta:focus-visible {
+    outline: 3px solid var(--marca-700);
+    outline-offset: 3px;
+}
+.tes-tarjeta__accion {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    color: var(--marca-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.tes-tarjeta .tes-etiquetas .insignia {
+    text-decoration: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    a.tes-tarjeta { transition: none; }
+    a.tes-tarjeta:hover { transform: none; }
+}
+
+/* Limpiar filtros con una X accesible y un estilo similar al botón Filtrar. */
+.tes-limpiar-filtros {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 44px;
+    min-height: 44px;
+    padding: .4rem;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-md);
+    background: var(--blanco);
+    color: var(--marca-700);
+    font-size: 1.5rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: background .18s ease, border-color .18s ease;
+}
+.tes-limpiar-filtros:hover {
+    background: var(--marca-100);
+    border-color: var(--marca-700);
+}
+.tes-limpiar-filtros:focus-visible {
+    outline: 3px solid var(--marca-700);
+    outline-offset: 2px;
+}
+
+/* En escritorio: exactamente tres columnas por fila (30 testimonios = 10 filas). */
+@media (min-width: 950px) {
+    #testimonios .rejilla {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+@media (min-width: 620px) and (max-width: 949px) {
+    #testimonios .rejilla {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 619px) {
+    #testimonios .rejilla {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Tarjetas uniformes: extracto de hasta 40 palabras y tres líneas visibles. */
+#testimonios .rejilla {
+    align-items: stretch;
+}
+.tes-tarjeta {
+    height: 17rem;
+    min-height: 17rem;
+    max-height: 17rem;
+}
+.tes-tarjeta .tarjeta__cuerpo {
+    /* Reservar una fila exclusiva para el botón: nunca comparte espacio
+       con un texto largo, aunque no tenga separadores. */
+    display: grid;
+    grid-template-rows: min-content min-content minmax(0, 1fr) min-content;
+    gap: .3rem;
+    padding: .75rem .9rem;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+.tes-tarjeta .tarjeta__cuerpo p,
+.tes-tarjeta .tarjeta__titulo {
+    margin-bottom: 0;
+}
+.tes-tarjeta .tarjeta__titulo {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.tes-tarjeta__metadatos {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.tes-tarjeta__extracto {
+    display: block;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    max-height: 4.35em; /* hasta tres líneas, sin cortar el espacio del botón */
+    line-height: 1.45;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+.tes-tarjeta .tes-tarjeta__accion {
+    align-self: end;
+    justify-self: start;
+    display: inline-flex;
+    position: relative;
+    margin-top: .15rem;
+    padding: .3rem .7rem;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-sm);
+    background: var(--blanco);
+    text-decoration: none;
+    font-size: .9rem;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+.tes-tarjeta .tes-tarjeta__accion[hidden] {
+    display: none !important;
+}
+.tes-tarjeta .tarjeta__pie {
+    max-height: 2.8rem;
+    overflow: hidden;
+    padding: .5rem .9rem;
+    flex: 0 0 auto;
+}
+@media (max-width: 619px) {
+    .tes-tarjeta {
+        height: 16.5rem;
+        min-height: 16.5rem;
+        max-height: 16.5rem;
+    }
+}
+
+/* Navegación numerada: anterior, página activa y siguiente. */
+.tes-paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-block: 1.25rem .4rem;
+}
+.tes-paginacion__numeros {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+.tes-paginacion__control,
+.tes-paginacion__numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: .55rem .75rem;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-md);
+    background: var(--blanco);
+    color: var(--marca-700);
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1;
+}
+.tes-paginacion__control { gap: .4rem; }
+a.tes-paginacion__numero:hover,
+a.tes-paginacion__control:hover {
+    background: var(--marca-100);
+    border-color: var(--marca-700);
+}
+.tes-paginacion__numero--actual {
+    background: var(--marca-700);
+    color: var(--blanco);
+    border-color: var(--marca-700);
+}
+.tes-paginacion__control--desactivado {
+    opacity: .4;
+    cursor: not-allowed;
+}
+.tes-paginacion__total {
+    flex-basis: 100%;
+    text-align: center;
+    color: var(--texto-suave);
+}
+.tes-paginacion a:focus-visible {
+    outline: 3px solid var(--marca-700);
+    outline-offset: 2px;
+}
+
+/* Filtro público multiselección: etiquetas en desplegable. */
+.tes-filtros {
+    align-items: flex-end;
+}
+.tes-filtros .campo.tes-filtro-etiquetas {
+    flex: 0 0 19rem;
+    width: 19rem;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+}
+.tes-filtro-etiquetas > .campo__etiqueta {
+    margin-bottom: var(--e2);
+}
+.tes-filtro-etiquetas__desplegable {
+    position: relative;
+    width: 100%;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-sm);
+    background: var(--blanco);
+}
+.tes-filtro-etiquetas__desplegable[open] {
+    z-index: 25;
+}
+.tes-filtro-etiquetas__desplegable summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .4rem;
+    height: 48px;
+    min-height: 48px;
+    padding: .5rem .75rem;
+    font-size: .875rem;
+    line-height: 1.2;
+    cursor: pointer;
+}
+.tes-filtro-etiquetas__desplegable summary > span:first-child {
+    min-width: 0;
+    white-space: nowrap;
+}
+.tes-filtro-etiquetas__contador {
+    color: var(--texto-suave);
+    font-size: .72rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+.tes-filtro-etiquetas__panel {
+    position: absolute;
+    top: calc(100% + .35rem);
+    left: 0;
+    z-index: 25;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: .5rem;
+    box-sizing: border-box;
+    width: 100%;
+    max-height: min(20rem, 60vh);
+    padding: .85rem;
+    overflow-y: auto;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-md);
+    background: var(--blanco);
+    box-shadow: var(--sombra-3);
+}
+.tes-filtro-etiquetas__opcion {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .65rem;
+    max-width: 100%;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-md);
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+.tes-filtro-etiquetas__opcion:has(input:checked) {
+    background: var(--marca-100);
+    border-color: var(--marca-700);
+}
+.tes-filtro-etiquetas__opcion input {
+    accent-color: var(--marca-700);
+}
+#tes-resultados[aria-busy="true"] {
+    opacity: .65;
+    transition: opacity .12s ease;
+}
+.tes-limpiar-filtros[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 640px) {
+    .tes-filtros .campo.tes-filtro-etiquetas {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+}
