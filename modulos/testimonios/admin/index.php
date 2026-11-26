@@ -46,7 +46,7 @@ $testimonios = $consulta->fetchAll();
 $etiquetas = tes_etiquetas_por_testimonio(array_column($testimonios, 'id'));
 $parametros = $filtro === '' ? [] : ['estado' => $filtro];
 
-cabecera('Panel de Moderación', '', '../css/admin.css');
+cabecera('Panel de Moderación', '', '../css/admin.css?v=' . filemtime(__DIR__ . '/../css/admin.css'));
 ?>
 
 <section class="contenedor seccion">
@@ -111,36 +111,55 @@ cabecera('Panel de Moderación', '', '../css/admin.css');
                                 </a>
                             </td>
                             <td role="cell" class="tes-acciones">
+                                <?php $idTestimonio = (int) $t['id']; ?>
                                 <span class="tes-etiqueta" aria-hidden="true">Acciones</span>
-                                <?php if ($t['estado'] === 'pendiente'): ?>
-                                    <form method="POST" action="actualizar_estado.php">
+                                <div class="tes-acciones__botones">
+                                    <?php if ($t['estado'] === 'pendiente'): ?>
+                                        <form method="POST" action="actualizar_estado.php">
+                                            <?= campo_token() ?>
+                                            <input type="hidden" name="id" value="<?= $idTestimonio ?>">
+                                            <button class="boton boton--primario boton--pequeno"
+                                                    type="submit" name="accion" value="revisar">Iniciar revisión</button>
+                                        </form>
+                                    <?php elseif ($t['estado'] === 'en_revision'): ?>
+                                        <form method="POST" action="actualizar_estado.php">
+                                            <?= campo_token() ?>
+                                            <input type="hidden" name="id" value="<?= $idTestimonio ?>">
+                                            <button class="boton boton--primario tes-acciones__icono"
+                                                    type="submit" name="accion" value="publicar"
+                                                    aria-label="Publicar" title="Publicar">
+                                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="actualizar_estado.php" id="rechazar-<?= $idTestimonio ?>">
+                                            <?= campo_token() ?>
+                                            <input type="hidden" name="id" value="<?= $idTestimonio ?>">
+                                            <button class="boton boton--peligro tes-acciones__icono"
+                                                    type="submit" name="accion" value="rechazar"
+                                                    aria-label="Rechazar" title="Rechazar">
+                                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                    <form method="POST" action="eliminar_testimonio.php" class="form-eliminar">
                                         <?= campo_token() ?>
-                                        <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
-                                        <button class="boton boton--primario boton--pequeno"
-                                                type="submit" name="accion" value="revisar">Iniciar revisión</button>
+                                        <input type="hidden" name="id" value="<?= $idTestimonio ?>">
+                                        <button class="boton boton--peligro tes-acciones__icono" type="submit"
+                                                aria-label="Eliminar" title="Eliminar">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5m4-5v5"/>
+                                            </svg>
+                                        </button>
                                     </form>
-                                <?php elseif ($t['estado'] === 'en_revision'): ?>
-                                    <form method="POST" action="actualizar_estado.php">
-                                        <?= campo_token() ?>
-                                        <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
-                                        <button class="boton boton--primario boton--pequeno"
-                                                type="submit" name="accion" value="publicar">Publicar</button>
-                                    </form>
-                                    <form method="POST" action="actualizar_estado.php" class="mt-4">
-                                        <?= campo_token() ?>
-                                        <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
-                                        <label for="motivo-<?= (int) $t['id'] ?>">Motivo de rechazo</label>
-                                        <input class="campo__control" id="motivo-<?= (int) $t['id'] ?>"
-                                               type="text" name="motivo" maxlength="300" required>
-                                        <button class="boton boton--peligro boton--pequeno"
-                                                type="submit" name="accion" value="rechazar">Rechazar</button>
-                                    </form>
+                                </div>
+                                <?php if ($t['estado'] === 'en_revision'): ?>
+                                    <div class="tes-acciones__motivo">
+                                        <label for="motivo-<?= $idTestimonio ?>">Motivo de rechazo</label>
+                                        <input class="campo__control" id="motivo-<?= $idTestimonio ?>"
+                                               form="rechazar-<?= $idTestimonio ?>" type="text" name="motivo"
+                                               maxlength="300" required>
+                                    </div>
                                 <?php endif; ?>
-                                <form method="POST" action="eliminar_testimonio.php" class="mt-4 form-eliminar">
-                                    <?= campo_token() ?>
-                                    <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
-                                    <button class="boton boton--peligro boton--pequeno" type="submit">Eliminar</button>
-                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
