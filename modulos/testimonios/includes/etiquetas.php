@@ -1,6 +1,31 @@
 <?php
 declare(strict_types=1);
 
+const TES_MAX_ETIQUETAS = 3;
+
+/** Valida las etiquetas que se van a guardar en un testimonio. */
+function tes_validar_etiquetas(mixed $seleccion): array
+{
+    if (!is_array($seleccion)) {
+        throw new InvalidArgumentException('Selecciona etiquetas válidas.');
+    }
+    if (count($seleccion) > TES_MAX_ETIQUETAS) {
+        throw new InvalidArgumentException('Puedes guardar hasta ' . TES_MAX_ETIQUETAS . ' etiquetas por testimonio.');
+    }
+
+    $ids = [];
+    foreach ($seleccion as $valor) {
+        $id = is_string($valor) ? entero($valor) : null;
+        if ($id === null) {
+            throw new InvalidArgumentException('Selecciona etiquetas válidas.');
+        }
+        $ids[$id] = $id;
+    }
+
+    sort($ids);
+    return $ids;
+}
+
 /** Catálogo creado por Coordinación, visible en el formulario y el filtro público. */
 function tes_etiquetas_disponibles(): array
 {

@@ -68,19 +68,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     throw new InvalidArgumentException('Selecciona un testimonio válido.');
                 }
 
-                $seleccion = $_POST['etiquetas'] ?? [];
-                if (!is_array($seleccion)) {
-                    throw new InvalidArgumentException('Selecciona etiquetas válidas.');
-                }
-                $ids = [];
-                foreach ($seleccion as $valor) {
-                    $idEtiqueta = is_string($valor) ? entero($valor) : null;
-                    if ($idEtiqueta === null) {
-                        throw new InvalidArgumentException('Selecciona etiquetas válidas.');
-                    }
-                    $ids[$idEtiqueta] = $idEtiqueta;
-                }
-                ksort($ids);
+                $ids = tes_validar_etiquetas($_POST['etiquetas'] ?? []);
 
                 $conexion->beginTransaction();
                 $consulta = $conexion->prepare('SELECT id FROM tes_testimonios WHERE id = ? FOR UPDATE');
@@ -152,8 +140,14 @@ cabecera('Administrar etiquetas', '', '../css/admin.css');
         <?php if ($etiquetas): ?>
             <form class="formulario" action="<?= e($volver) ?>" method="post">
                 <?= campo_token() ?>
-                <fieldset class="campo">
+                <fieldset class="campo" data-limite-etiquetas="<?= TES_MAX_ETIQUETAS ?>">
                     <legend class="campo__etiqueta">Selecciona las etiquetas</legend>
+                    <p class="campo__ayuda" data-contador-etiquetas aria-live="polite">
+                        <?= count($asignadas) ?> de <?= TES_MAX_ETIQUETAS ?> seleccionadas.
+                        <?php if (count($asignadas) > TES_MAX_ETIQUETAS): ?>
+                            Desmarca las que sobran antes de guardar.
+                        <?php endif; ?>
+                    </p>
                     <?php foreach ($etiquetas as $tag): ?>
                         <label class="tes-opcion-etiqueta">
                             <input type="checkbox" name="etiquetas[]" value="<?= (int) $tag['id'] ?>"
@@ -203,4 +197,5 @@ cabecera('Administrar etiquetas', '', '../css/admin.css');
     <?php endforeach; ?>
 </section>
 
+<script src="../assets/js/tes.js?v=<?= filemtime(__DIR__ . '/../assets/js/tes.js') ?>" defer></script>
 <?php pie(); ?>

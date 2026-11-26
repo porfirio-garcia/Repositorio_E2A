@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS tes_testimonios (
     video_archivo VARCHAR(255) NULL,
     video_publico TINYINT(1) NOT NULL DEFAULT 0,
 
-    estado ENUM('pendiente', 'aprobado', 'rechazado')
+    estado ENUM('pendiente', 'aprobado', 'rechazado', 'en_revision')
         NOT NULL DEFAULT 'pendiente',
 
     creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS tes_testimonios (
 -- Bitacora de cambios de estado
 -- -----------------------------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS tes_historial (
+CREATE TABLE IF NOT EXISTS tes_moderacion (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 
     testimonio_id INT UNSIGNED NOT NULL,
@@ -75,13 +75,13 @@ CREATE TABLE IF NOT EXISTS tes_historial (
 
     creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    KEY ix_tes_historial_testimonio (testimonio_id),
+    KEY ix_tes_moderacion_testimonio (testimonio_id),
 
-    CONSTRAINT fk_tes_historial_testimonio
+    CONSTRAINT fk_tes_moderacion_testimonio
         FOREIGN KEY (testimonio_id) REFERENCES tes_testimonios(id)
         ON UPDATE CASCADE ON DELETE CASCADE,
 
-    CONSTRAINT fk_tes_historial_usuario
+    CONSTRAINT fk_tes_moderacion_usuario
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
         ON UPDATE CASCADE ON DELETE SET NULL
 

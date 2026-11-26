@@ -12,23 +12,29 @@ if (!is_string($_POST['token'] ?? null)) {
 }
 verificar_token();
 
-$id = $_POST['id'] ?? '';
-$accion = $_POST['accion'] ?? '';
-$motivo = $_POST['motivo'] ?? '';
-$id = is_string($id) ? entero($id) : null;
-$motivo = is_string($motivo) ? trim($motivo) : '';
+$idRecibido = $_POST['id'] ?? null;
+$id = is_string($idRecibido) ? entero($idRecibido) : null;
+$accion = $_POST['accion'] ?? null;
+$transicion = match ($accion) {
+    'revisar' => ['pendiente', 'en_revision', 'Testimonio marcado en revisión.'],
+    'publicar' => ['en_revision', 'aprobado', 'Testimonio publicado.'],
+    'rechazar' => ['en_revision', 'rechazado', 'Testimonio rechazado.'],
+    default => null,
+};
 
-if ($id === null || !in_array($accion, ['publicar', 'rechazar'], true)) {
+if ($id === null || $transicion === null) {
     mensaje('error', 'El testimonio o la acción no son válidos.');
     redirigir('index.php');
 }
 
-if ($accion === 'publicar') {
-    $estado = 'aprobado';
-    $motivo = null;
-} else {
-    $estado = 'rechazado';
-    if ($motivo === '' || mb_strlen($motivo) > 300) {
+[$estadoPrevio, $estadoNuevo, $confirmacion] = $transicion;
+$motivo = null;
+if ($accion === 'rechazar') {
+    $texto = $_POST['motivo'] ?? null;
+    if (is_string($texto)) {
+        $motivo = preg_replace('/\A[\p{Z}\s]+|[\p{Z}\s]+\z/u', '', $texto);
+    }
+    if ($motivo === null || $motivo === '' || mb_strlen($motivo) > 300) {
         mensaje('error', 'Escribe un motivo de rechazo de 1 a 300 caracteres.');
         redirigir('index.php');
     }
@@ -42,27 +48,27 @@ try {
     $conexion->beginTransaction();
 
     $actualizar = $conexion->prepare(
-        "UPDATE tes_testimonios
+        'UPDATE tes_testimonios
          SET estado = ?, fecha_moderacion = NOW(), moderado_por = ?
-         WHERE id = ? AND estado = 'pendiente'"
+         WHERE id = ? AND estado = ?'
     );
-    $actualizar->execute([$estado, $moderador, $id]);
+    $actualizar->execute([$estadoNuevo, $moderador, $id, $estadoPrevio]);
 
     if ($actualizar->rowCount() !== 1) {
         $conexion->rollBack();
-        mensaje('error', 'El testimonio no existe o ya fue moderado.');
+        mensaje('error', 'El testimonio no existe o su estado actual no permite esta acción.');
         redirigir('index.php');
     }
 
     $historial = $conexion->prepare(
-        "INSERT INTO tes_historial
+        'INSERT INTO tes_moderacion
          (testimonio_id, estado_previo, estado_nuevo, motivo, usuario_id)
-         VALUES (?, 'pendiente', ?, ?, ?)"
+         VALUES (?, ?, ?, ?, ?)'
     );
-    $historial->execute([$id, $estado, $motivo, $moderador]);
+    $historial->execute([$id, $estadoPrevio, $estadoNuevo, $motivo, $moderador]);
 
     $conexion->commit();
-    mensaje('exito', $estado === 'aprobado' ? 'Testimonio publicado.' : 'Testimonio rechazado.');
+    mensaje('exito', $confirmacion);
 } catch (PDOException $error) {
     if ($conexion->inTransaction()) {
         $conexion->rollBack();
